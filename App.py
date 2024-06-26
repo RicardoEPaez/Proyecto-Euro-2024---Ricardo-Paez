@@ -254,12 +254,11 @@ class App:
         if pago_ticket == "si":
             print("Su compra ha sido existosa")
             codigo_seguridad = generar_codigo_seguridad()
-            print(f"Código de Seguridad: {codigo_seguridad}")
             ticket = Ticket(ci_cliente, partido, tipo_entrada, asiento_asig, codigo_seguridad)
             
             self.clientes.append(datos_cliente)        
             self.tickets.append(ticket)
-
+        
 # IMPRIMIR INFO TICKET
             if tipo_entrada == "vip":
                 partido.asientos_ocupados_vip.append(asiento_asig)
@@ -523,10 +522,3 @@ class App:
             #Creamos un objeto donde vamos a guardar la informacion y se los vamos a agregar a self.partidos   
             juego = Partido(partido["id"],partido["number"], home , away , partido["date"],  partido["group"], partido["stadium_id"])
             self.partidos.append(juego)
-            
-            
-            
-        
-            
-        
-    
