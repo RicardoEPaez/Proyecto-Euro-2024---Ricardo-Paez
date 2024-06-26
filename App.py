@@ -255,10 +255,16 @@ class App:
             print("Su compra ha sido existosa")
             codigo_seguridad = generar_codigo_seguridad()
             ticket = Ticket(ci_cliente, partido, tipo_entrada, asiento_asig, codigo_seguridad)
-            
             self.clientes.append(datos_cliente)        
             self.tickets.append(ticket)
-        
+            print("-----------------------------")
+            print("Info del Ticket: ")
+            print(f"Partido: {partido}")
+            print(f"Fecha: {partido.date}")
+            print(f"Estadio: {estadio}")
+            print(f"Tipo: {tipo_entrada}")
+            print("-----------------------------")
+            
 # IMPRIMIR INFO TICKET
             if tipo_entrada == "vip":
                 partido.asientos_ocupados_vip.append(asiento_asig)
