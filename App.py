@@ -399,7 +399,7 @@ class App:
                 precio_minimo = round(float(precio_minimo) ,2)
                 precio_maximo = input("Ingrese el precio máximo con IVA: ")
                 while not precio_maximo.isnumeric() or float(precio_maximo) < precio_minimo:
-                    precio_maximo = input("\n:Precio inválido. El precio máximo debe ser un valor numérico mayor al precio mínimo: ")
+                    precio_maximo = input("\n:Precio inválido. El precio máximo debe ser un valor numérico mayor al precio mínimo : ")
                 precio_maximo = round(float(precio_maximo),2)    
                 print("---------------------------------------------------------------------------------------------")
                 print(f"\nListado de productos con precio entre {precio_minimo} y {precio_maximo}")
