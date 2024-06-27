@@ -16,7 +16,7 @@ class Ticket:
     Metodos:\n
     show: Muestra los datos del ticket"""
     
-    #Constructor de la clase Cliente
+    #Constructor de la clase Ticket
     def __init__(self, cedula, partido, tipo_de_asiento, asiento, codigo_seguridad):
         self.cedula = cedula
         self.partido = partido

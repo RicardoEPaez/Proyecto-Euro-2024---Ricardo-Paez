@@ -4,7 +4,7 @@ import math
 import urllib.request
 import requests
 from Equipo import Equipo
-from Estadio import *
+from Estadio import Estadio
 from Partido import Partido
 from Producto import Producto
 from Restaurant import Restaurant
@@ -21,8 +21,8 @@ class App:
         self.equipos = []
         self.estadios = []
         self.partidos = []
-        self.restaurantes = []
-        self.productos = []
+        #self.restaurantes = []
+        #self.productos = []
         self.clientes = []
         self.tickets = []
         
@@ -202,31 +202,34 @@ class App:
         #Lectura y Validacion del asiento seleccionado
         while True:
             asiento_asig = input("\nIngrese el asiento de su preferencia: ").upper()
-            asiento_asig_columna = asiento_asig[0]
-            asiento_asig_fila = int(asiento_asig.replace(asiento_asig[0], ""))
-            col_asientos_ultfila = columna_asientos[0:capacidad_asientos % (cantidad_filas - 1)]
-            if asiento_asig_fila < cantidad_filas:
-                if asiento_asig_columna not in columna_asientos:
-                    print("\nAsiento Inválido. Intente de nuevo\n")
-                else:
-                    if tipo_entrada == "vip":
-                        if asiento_asig in partido.asientos_ocupados_vip:
-                            print("\nEste asiento ya esta ocupado. Intente de nuevo\n")
-                        else:
-                            break
+            if len(asiento_asig) >= 2: 
+                asiento_asig_columna = asiento_asig[0]
+                asiento_asig_fila = int(asiento_asig.replace(asiento_asig[0], ""))
+                col_asientos_ultfila = columna_asientos[0:capacidad_asientos % (cantidad_filas - 1)]
+                if asiento_asig_fila < cantidad_filas:
+                    if asiento_asig_columna not in columna_asientos:
+                        print("\nAsiento Inválido. Intente de nuevo\n")
                     else:
-                        if asiento_asig in partido.asientos_ocupados_general:
-                            print("\nEste asiento ya esta ocupado. Intente de nuevo\n")
+                        if tipo_entrada == "vip":
+                            if asiento_asig in partido.asientos_ocupados_vip:
+                                print("\nEste asiento ya esta ocupado. Intente de nuevo\n")
+                            else:
+                                break
                         else:
-                            break
-            elif asiento_asig_fila == cantidad_filas:
-                if asiento_asig_columna not in col_asientos_ultfila:
-                    print("\nAsiento Inválido. Intente de nuevo\n")
-                else:
-                    break
-            elif asiento_asig_fila > cantidad_filas:
+                            if asiento_asig in partido.asientos_ocupados_general:
+                                print("\nEste asiento ya esta ocupado. Intente de nuevo\n")
+                            else:
+                                break
+                elif asiento_asig_fila == cantidad_filas:
+                    if asiento_asig_columna not in col_asientos_ultfila:
+                        print("\nAsiento Inválido. Intente de nuevo\n")
+                    else:
+                        break
+                elif asiento_asig_fila > cantidad_filas:
+                    print("\nAsiento Invalido. Intente de nuevo\n")
+            else:
                 print("\nAsiento Invalido. Intente de nuevo\n")
-         
+            
         if es_vampiro(ci_cliente):
             precio_descuento = precio / 2
             iva = round(precio_descuento * 0.16, 2)
@@ -257,15 +260,13 @@ class App:
             ticket = Ticket(ci_cliente, partido, tipo_entrada, asiento_asig, codigo_seguridad)
             self.clientes.append(datos_cliente)        
             self.tickets.append(ticket)
-            print("-----------------------------")
-            print("Info del Ticket: ")
-            print(f"Partido: {partido.name}")
-            print(f"Fecha: {partido.date}")
-            print(f"Estadio: {estadio.name}")
-            print(f"Tipo: {tipo_entrada}")
-            print("-----------------------------")
-            
-# IMPRIMIR INFO TICKET
+            print("******************************************************************************************")
+            print(f"                        TICKET {ticket.tipo_de_asiento}                                  ")                           
+            print(f"                          {partido.home.name}  vs {partido.away.name} ")
+            print(f"                       Estadio: {estadio.name}")
+            print(f"                         Fecha: {partido.date}")
+            print(f"                   Codigo seguridad: {codigo_seguridad}")
+            print("******************************************************************************************")
             if tipo_entrada == "vip":
                 partido.asientos_ocupados_vip.append(asiento_asig)
             elif tipo_entrada == "general":
@@ -423,10 +424,42 @@ class App:
     
 #Este metodo se visualiza la gestion de las ventas de restaurantes
     def gestion_ventas_restaurantes(self):
-        ci_cliente = input("Ingrese una cedula: ")
+        print("\n=======================")
+        print("Gestion de Venta en Restaurantes")
+        print("=======================\n")
+        
+        print("\nListado de Estadios")
+        print("-------------------\n")
+        for i, estadio in enumerate(self.estadios):
+            i += 1
+            print(i)
+            estadio.nombre_show()
+        opcion=input("\nSeleccione el número del estadio donde se ubica el restaurante a gestionar: ")
+        while not opcion.isnumeric() or int(opcion) > len(self.estadios):
+            opcion = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
+        index_estadio = int(opcion) - 1
+        estadio = self.estadios[index_estadio]
+        
+        print(f"\nListado de Restaurantes ubicados en {estadio.name}")
+        print("--------------------------------------------------------------")
+        for i, restaurante in enumerate(estadio.restaurantes):
+            i += 1
+            print(i)
+            restaurante.nombre_show()
+        opcion=input("\nSeleccione el número del restaurante que desea gestionar: ")
+        while not opcion.isnumeric() or int(opcion) > len(estadio.restaurantes):
+            opcion = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
+        index_restaurante = int(opcion) - 1
+        restaurante = estadio.restaurantes[index_restaurante]
+        
+        ci_cliente = input("Ingrese su cedula (C.I): ")
         for cliente in self.clientes:
-            if cliente.ci == ci_cliente and  cliente.entrada == "vip":
+            if cliente.cedula == ci_cliente and cliente.entrada == "vip":
                 cliente.show()
+                
+            else: 
+                print("No es cliente VIP. No puedes realizar compras ")
+                
     
     
     
@@ -505,11 +538,11 @@ class App:
                     product = Producto(product["name"], product["quantity"], round(float(product["price"]) * 1.16,2), product["stock"], clasificacion, product["adicional"])
                     #Se le agreamos a la lista vacia de los productos internos le vamos agregando el objeto creado (product) y tambien se lo agregamos self.productos
                     productos_internos.append(product)
-                    self.productos.append(product)
+                    #self.productos.append(product)
                 #Creamos un objeto donde vamos a guardar la informacion, tambien se lo vamos a agregar a restaurantes_internos que es listaaa vacia, y a self.restaruantes
                 restaurant = Restaurant(restaurant["name"], productos_internos)
                 restaurantes_internos.append(restaurant)
-                self.restaurantes.append(restaurant)
+                #self.restaurantes.append(restaurant)
             #Creamos un obejto que se va a llamar recinto donde se va a guardar la informacion y se los vamos a agregar a self.estadios
             recinto = Estadio(estadio["id"], estadio["name"], estadio["city"], estadio["capacity"], restaurantes_internos)
             self.estadios.append(recinto)

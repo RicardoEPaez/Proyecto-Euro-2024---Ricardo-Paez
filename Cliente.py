@@ -9,7 +9,7 @@ class Cliente:
     cedula: string que representa el cedula del cliente\n
     edad: string que representa la edad del cliente\n
     partido: referencia al objeto partido\n
-    entrada: referencia al objeto ticket\n
+    entrada: string que representa el tipo de asiento del cliente: VIP o General\n
             
     Metodos:\n
     show: Muestra los datos del cliente"""
