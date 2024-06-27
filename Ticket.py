@@ -1,5 +1,5 @@
 """
-Constructor y metodos de la clase Cliente
+Constructor y metodos de la clase Ticket
 """
 
 class Ticket:
