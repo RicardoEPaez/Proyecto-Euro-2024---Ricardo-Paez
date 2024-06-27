@@ -1,8 +1,9 @@
-#Importamos las clases que creamos anteriormente a este clase
+#Importamos json, la libreria math, la libreria requests, y la liberia urllib.request
 import json
 import math
 import urllib.request
 import requests
+#Importamos las clases que creamos anteriormente a este clase
 from Equipo import Equipo
 from Estadio import Estadio
 from Partido import Partido
@@ -334,7 +335,6 @@ class App:
             opcion = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
         index_restaurante = int(opcion) - 1
         restaurante = estadio.restaurantes[index_restaurante]
-    
 
         while True:
             print("\n========================================================")
@@ -365,7 +365,7 @@ class App:
                         break
                 if not encontrado:
                     print(f"\nProducto {nombre_producto} no encontrado. Intente otra búsqueda")
-                    
+            #Opcion 2: Busqueda de un producto por tipo
             elif opcion == 2:
                 print(f"\nBúsqueda de productos del restaurant {restaurante.name} por tipo de producto")
                 print("=======================================================================================\n")
@@ -376,6 +376,7 @@ class App:
                     opcion = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico del 1-2: ")    
                 opcion = int(opcion)
                 encontrado = False
+                #Opcion 1: Producto por tipo Alimento
                 if opcion == 1:
                     print("\n-----------------------------")
                     print(f"Productos del Tipo: Alimento")
@@ -387,6 +388,7 @@ class App:
                     if not encontrado:
                         print(f"\nNo existen productos de tipo Alimento. Intente otra búsqueda")
                 else:
+                    #Opcion 2: Producto por tipo Bebida
                     print("\n-----------------------------")
                     print(f"Productos del Tipo Bebida:")
                     print(f"-----------------------------\n")
@@ -395,7 +397,8 @@ class App:
                             producto.show()
                             encontrado = True
                     if not encontrado:
-                        print(f"\nNo existen productos de tipo Bebida. Intente otra búsqueda")        
+                        print(f"\nNo existen productos de tipo Bebida. Intente otra búsqueda")
+            #Opcion 3: Busqueda de un producto por rango de precio        
             elif opcion == 3:
                 print(f"\nBúsqueda de productos del restaurante {restaurante.name} por rango de precio")
                 print("=======================================================================================\n")
@@ -417,6 +420,7 @@ class App:
                         encontrado = True
                 if not encontrado:
                         print(f"\nNo existen productos con precio entre {precio_minimo} y {precio_maximo}")           
+            #Regresar al Menu Principal
             elif opcion == 4:
                 break
         
