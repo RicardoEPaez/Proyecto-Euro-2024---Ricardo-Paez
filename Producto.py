@@ -7,9 +7,9 @@ class Producto:
     Atributos:\n
     name: string que representa el nombre del producto\n
     quantity: string que representa la cantidad del producto\n
-    price: string que representa el precio del producto\n
+    price: flotante que representa el precio del producto mas el IVA\n
     stock: string que representa la cantidad de stock del producto\n
-    Clasificacion: flotante que representa el precio del producto mas el IVA
+    Clasificacion: string que representa la clasificacion del producto: alimento o bebida\n
     adicional: string que representa la categoria del producto: plate, alcoholic, non-alcoholic, package\n
        
     Metodos:\n

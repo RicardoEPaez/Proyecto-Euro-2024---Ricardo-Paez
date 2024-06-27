@@ -53,17 +53,13 @@ def es_perfecto(numero):
     Retorno:\n
     True: el numero es perfecto\n
     False: el numero no es perfecto"""
-    
     numero = int(numero)
-    digitos = list(str(numero))
-    num_digitos = len(digitos)
-    # Comprobación de los factores
-    for i in range(1, round((int(numero)**0.5)+1)):
+    if numero < 1:
+        return False
+    sum_divisors = 1
+    for i in range(2, int(numero**0.5) + 1):
         if numero % i == 0:
-            factor1 = str(i)
-            factor2 = str(numero // i)
-            factores = factor1 + factor2
-            # Comprobación de la permutación
-            if sorted(digitos) == sorted(factores) and len(factor1) == len(factor2):
-                return True
-            
+            sum_divisors += i
+            if i != numero // i:
+                sum_divisors += numero // i
+    return sum_divisors == numero

@@ -11,6 +11,7 @@ from Producto import Producto
 from Restaurant import Restaurant
 from Cliente import Cliente
 from Ticket import Ticket
+from Venta import Venta_Restaurant
 from Utilitarios import *
 
 
@@ -264,7 +265,7 @@ class App:
             print("******************************************************************************************")
             print(f"                        TICKET {ticket.tipo_de_asiento}                                  ")                           
             print(f"                          {partido.home.name}  vs {partido.away.name} ")
-            print(f"                       Estadio: {estadio.name}")
+            print(f"                       Estadio: {partido_stadium.name}")
             print(f"                         Fecha: {partido.date}")
             print(f"                   Codigo seguridad: {codigo_seguridad}")
             print("******************************************************************************************")
@@ -437,10 +438,10 @@ class App:
             i += 1
             print(i)
             estadio.nombre_show()
-        opcion=input("\nSeleccione el número del estadio donde se ubica el restaurante a gestionar: ")
-        while not opcion.isnumeric() or int(opcion) > len(self.estadios):
-            opcion = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
-        index_estadio = int(opcion) - 1
+        respuesta=input("\nSeleccione el número del estadio donde se ubica el restaurante a gestionar: ")
+        while not respuesta.isnumeric() or int(respuesta) > len(self.estadios):
+            respuesta = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
+        index_estadio = int(respuesta) - 1
         estadio = self.estadios[index_estadio]
         print(f"\nListado de Restaurantes ubicados en {estadio.name}")
         print("--------------------------------------------------------------")
@@ -448,12 +449,87 @@ class App:
             i += 1
             print(i)
             restaurante.nombre_show()
-        opcion=input("\nSeleccione el número del restaurante que desea gestionar: ")
-        while not opcion.isnumeric() or int(opcion) > len(estadio.restaurantes):
-            opcion = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
-        index_restaurante = int(opcion) - 1
+        respuesta=input("\nSeleccione el número del restaurante que desea gestionar: ")
+        while not respuesta.isnumeric() or int(respuesta) > len(estadio.restaurantes):
+            respuesta = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
+        index_restaurante = int(respuesta) - 1
         restaurante = estadio.restaurantes[index_restaurante]
         
+        while True:
+            print("\n========================================================")
+            print(f"Gestion de Ventas Restaurante {restaurante.name}")
+            print("=========================================================\n")
+            print("1. Procesar Ventas del Restaurante")
+            print("2. Regresar al Menu Principal\n")
+            respuesta = input("Ingrese la opción deseada (1-2): ")
+            while not respuesta.isnumeric() or int(respuesta) > 2:
+                respuesta = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico del 1-2: ")
+            respuesta = int(respuesta)  
+            if respuesta == 1:
+                productos_por_vender = [] 
+                cedula_identidad = input("Ingrese su C.I: ")
+                encontrado = False
+                for cliente in self.clientes:
+                    if cliente.cedula == cedula_identidad:
+                        encontrado = True        
+                        if cliente.entrada == "vip":
+                            print(f"Lista de productos disponibles del restaruant {restaurante.name}")
+                            print("---------------------------------------------------------------------------")
+                            for i, producto in enumerate(restaurante.products):
+                                i += 1
+                                print(i)
+                                producto.show()
+                            while True:
+                                num_product = input("Ingrese el numero del producto que desea vender: ")
+                                while not num_product.isnumeric() or int(num_product) > len(restaurante.products):
+                                    num_product = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico válido: ")
+                                index_product = int(num_product) - 1
+                                producto = restaurante.products[index_product]
+                                if producto.adicional == "alcoholic" and int(cliente.edad) < 18:
+                                    print("Este producto es una bebida alcoholico. No se puede efectuar la venta ")
+                                else:
+                                    productos_por_vender.append(producto)
+                                    respuesta = input("El cliente desea otro producto (Si o No): ").lower()
+                                    while respuesta != "si" and respuesta != "no":
+                                        respuesta = input("Respuesta invalida, debe ser (Si o No): ").lower()
+                                    if respuesta == "no":
+                                        monto_total = 0
+                                        print("\n----------------------------------------------------------------")
+                                        print("                 Factura del cliente                            ")
+                                        print("----------------------------------------------------------------\n")
+                                        print(f"           Restaurante: {restaurante.name}\n")
+                                        for producto_facturado in productos_por_vender:
+                                            print(f"Nombre del Producto: {producto_facturado.name}")
+                                            print(f"Precio del Producto (Incluye IVA): {producto_facturado.price}")
+                                            print(f"Tipo del Producto: {producto_facturado.clasificacion} - {producto_facturado.adicional}\n")
+                                            monto_total += producto_facturado.price
+                                        print(f"Subtotal: {monto_total}")
+                                            
+                                        if es_perfecto(cedula_identidad):
+                                            print(f"La C.I del cliente es un numero perfecto, por lo tanto tiene un descuento del 15%: {monto_total * 0.15}  ")
+                                            rebaja = monto_total * 0.15
+                                            monto_total = monto_total - rebaja
+                                        print(f"Monto total: {monto_total}")
+                                        respuesta = input("El cliente desea realizar la venta (Si o No): ").lower()
+                                        while respuesta != "si" and respuesta != "no":
+                                                respuesta = input("Respuesta invalida, debe ser (Si o No): ").lower()  
+                                        if respuesta == "si":
+                                            for producto_facturado in productos_por_vender:
+                                                producto_facturado.stock -= 1
+                                            print("Venta realizada existosamente")
+                                            ventas_facturadas = Venta_Restaurant(cliente, productos_por_vender, monto_total)
+                                            restaurante.ventas.append(ventas_facturadas)   
+                                            break
+                                        else:
+                                            print("No se ha realizado la venta")
+                                            break                           
+                        else:
+                            print("La CI no corresponde a un cliente VIP, por lo que no puede efectuar compras")
+                if not encontrado:
+                    print("Cliente no encontrado. Intente con otra CI")
+                
+            elif respuesta == 2:
+                break
                 
     
     

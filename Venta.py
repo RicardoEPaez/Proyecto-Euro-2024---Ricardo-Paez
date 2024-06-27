@@ -11,17 +11,15 @@ class Venta_Restaurant:
     Descuento: descuento por C.I = nro. perfecto\n
     Total: total de la venta\n
     
-       
     Metodos:\n
     show: Muestra los datos de la venta"""
     
     #Constructor de la clase Venta_Restaurant 
-    def __init__(self, cliente, productos, descuento, total):
+    def __init__(self, cliente, productos,  total):
         self.cliente = cliente
         self.productos = productos
-        self.descuento = descuento
         self.total = total
         
     def show(self):
         """Muestra en la consola los datos de la venta"""
-        print(f"Cliente: {self.cliente.name}\nC.I: {self.cliente.cedula}\nProductos: {self.productos}\nDescuento: {self.descuento}\nTotal: {self.total}\n")
+        print(f"Cliente: {self.cliente.nombre}\nC.I: {self.cliente.cedula}\nProductos: {self.productos}\nTotal: {self.total}\n")

@@ -16,6 +16,7 @@ class Restaurant:
     def __init__(self, name, products):
         self.name = name
         self.products = products
+        self.ventas = []
         
     def show(self):
         """Muestra en la cosola el nombre y los productos de un restaurant"""
