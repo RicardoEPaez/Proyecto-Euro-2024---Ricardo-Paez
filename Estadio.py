@@ -9,7 +9,7 @@ class Estadio:
     name: string que representa el nombre del estadio\n
     city: string que representa la ciudad del estadio\n
     capacity: string que representa la capacidad del estadio\n
-    restaruants: lista que representa los restaruants que se encuentran en el estadio\n
+    restaruants: lista que representa los restaurantes que se encuentran en el estadio\n
     
     Metodos:\n
     show: Muestra la informacion del estadio"""

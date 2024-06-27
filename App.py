@@ -424,10 +424,9 @@ class App:
     
 #Este metodo se visualiza la gestion de las ventas de restaurantes
     def gestion_ventas_restaurantes(self):
-        print("\n=======================")
+        print("\n==============================")
         print("Gestion de Venta en Restaurantes")
-        print("=======================\n")
-        
+        print("================================\n")
         print("\nListado de Estadios")
         print("-------------------\n")
         for i, estadio in enumerate(self.estadios):
@@ -439,7 +438,6 @@ class App:
             opcion = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
         index_estadio = int(opcion) - 1
         estadio = self.estadios[index_estadio]
-        
         print(f"\nListado de Restaurantes ubicados en {estadio.name}")
         print("--------------------------------------------------------------")
         for i, restaurante in enumerate(estadio.restaurantes):
@@ -452,13 +450,6 @@ class App:
         index_restaurante = int(opcion) - 1
         restaurante = estadio.restaurantes[index_restaurante]
         
-        ci_cliente = input("Ingrese su cedula (C.I): ")
-        for cliente in self.clientes:
-            if cliente.cedula == ci_cliente and cliente.entrada == "vip":
-                cliente.show()
-                
-            else: 
-                print("No es cliente VIP. No puedes realizar compras ")
                 
     
     
