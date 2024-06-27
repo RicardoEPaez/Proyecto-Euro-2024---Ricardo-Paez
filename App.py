@@ -259,9 +259,9 @@ class App:
             self.tickets.append(ticket)
             print("-----------------------------")
             print("Info del Ticket: ")
-            print(f"Partido: {partido}")
+            print(f"Partido: {partido.name}")
             print(f"Fecha: {partido.date}")
-            print(f"Estadio: {estadio}")
+            print(f"Estadio: {estadio.name}")
             print(f"Tipo: {tipo_entrada}")
             print("-----------------------------")
             
