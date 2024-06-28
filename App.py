@@ -28,7 +28,7 @@ class App:
         self.clientes = []
         self.tickets = []
         
-#Este metodo inicia el programa y carga el programa
+#Metodo para la garga e incio de la aplicacion
     def run(self):
         self.informacion_partidos()
         print("Bienvenido a la aplicación EURO 2024")
@@ -68,7 +68,7 @@ class App:
                 print("\nUd. ha salido satisfactoriamente de la alplicación EURO 2024. Hasta pronto.\n")
                 break
  
-#Este metodo inicia la gestion de partidos y estadios            
+#Metodo Gestion de Partidos y Estadios            
     def gestion_partidos_estadios(self):
         while True:
             print("\n-------------------------------------")
@@ -79,11 +79,11 @@ class App:
             print("3. Mostrar todos los partidos que se jugarán en una fecha determinada")
             print("4. Regresar al Menú Principal\n")
             opcion = input("\nIngrese un valor numérico del 1 al 4: ")
-            while not opcion.isnumeric() or int(opcion) > 4:
+            while not opcion.isnumeric() or int(opcion) == 0 or int(opcion) > 4:
                 opcion = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico del 1 al 4: ")
             opcion = int(opcion)
             if opcion == 1:
-                respuesta = input("\nIngresa el nombre del país que desea consultar: ").lower()
+                respuesta = input("\nIngrese el nombre del país que desea consultar: ").lower()
                 encontrado = False
                 for partido in self.partidos:
                     if partido.home.name.lower() == respuesta or partido.away.name.lower() == respuesta:
@@ -112,45 +112,48 @@ class App:
             elif opcion == 4:
                 break 
             
-#Este metodo se visualiza la gestion de ventas, entradas            
+#Metodo Gestion de Ventas de Entradas            
     def gestion_ventas_entradas(self):
-        print("---Datos del cliente---")
+        print("\n--------------------------------------------------------")
+        print("                   Datos del cliente")
+        print("--------------------------------------------------------\n")
         #Les preguntamos al usuario sus datos y hacemos su respectiva validacion por cada input
-        nombre_cliente = input("Escribe su nombre: ").lower()
+        nombre_cliente = input("Ingrese el nombre del cliente: ").lower()
         while not nombre_cliente.isalpha():
-            nombre_cliente = input("Escribe su nombre valido: ").lower()    
+            nombre_cliente = input("\nIngrese un nombre válido: ").lower()    
         
-        ci_cliente = input("Indique su Cedula de Identidad (No utilice puntos, ni letras. Ejem: 332321): ")    
+        ci_cliente = input("\nIngrese la Cédula de Identidad (C.I) del cliente (No utilice puntos, ni letras. Ejem: 332321): ")    
         while not ci_cliente.isdigit():
-            ci_cliente = input("CI. Invalida. Indique un valor de CI correcto: ") 
+            ci_cliente = input("\nC.I. inválida. Indique un valor de C.I. correcto: ") 
         
-        edad_cliente = input("Indique su Edad: ")
+        edad_cliente = input("\nIngrese la edad del cliente: ")
         while not edad_cliente.isnumeric() or not int(edad_cliente) > 0:
-            edad_cliente = input("Ingrese una edad valida: ")
+            edad_cliente = input("\nIngrese una edad válida: ")
        
         #Hacemos un breve menú donde el usuario pordra ver la opcion de entradas
-        print("\n----Opcion de Entrada----\n")
-        print("1. Vip")
+        print("\n----Opcion de Entrada----")
+        print("1. VIP")
         print("2. General\n")
         #Les preguntamos el usuario que entrada desea comprar y hacemos la validacion 
-        tipo_entrada = input("Ingrese un numero para seleccionar la entrada: ")
+        tipo_entrada = input("\nIngrese 1 ó 2 para seleccionar el tipo de entrada: ")
         while tipo_entrada != "1" and tipo_entrada != "2":
-            tipo_entrada = input("Opción Invalida. Ingrese de nuevo un número (1 o 2) para seleccionar el tipo de entrada: ")
+            tipo_entrada = input("\nOpción Inválida. Ingrese de nuevo un número (1 o 2) para seleccionar el tipo de entrada: ")
         #Validamos si el usuario marco (1 o 2) y se lo asignamos a la variable entrada_vip_general
         if tipo_entrada == "1":
             tipo_entrada = "vip"
         elif tipo_entrada == "2":
             tipo_entrada = "general"
         
-        #Recorremos partido en self.partidos y hacemos la enumeracion con inicio 1
-        print("Lista de partidos posibles\n")
-       
+        #Recorremos partido en self.partidos
+        print("\n--------------------------")
+        print("Lista de partidos posibles")
+        print("--------------------------\n")
         for partido in self.partidos:
             partido.show()
         
         #Le preguntamos al usuario que ingrese un numero de acuerdo a lista de partido y hacemos la validacion
-        nro_partido = input("Ingrese el número de partido a seleccionar: ")
-        while not nro_partido.isnumeric() or int(nro_partido) > len(self.partidos):
+        nro_partido = input("\nIngrese el número de partido a seleccionar: ")
+        while not nro_partido.isnumeric() or int(nro_partido) > len(self.partidos) or int(nro_partido) == 0:
                 nro_partido = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
         
         nro_partido = int(nro_partido)
@@ -187,9 +190,9 @@ class App:
         
      
         #Muestra del Mapa de Asientos
-        
-        print(f"\nMapa de Asientos del Estadio: {partido_stadium.name}\n")
-        print("-----------------------------")
+        print("\n-----------------------------------------------------")
+        print(f"Mapa de Asientos del Estadio: {partido_stadium.name}")
+        print("-----------------------------------------------------\n")
         for nro_fila in range(1, cantidad_filas + 1):
             fila = []
             if nro_fila < cantidad_filas:
@@ -231,7 +234,8 @@ class App:
                     print("\nAsiento Invalido. Intente de nuevo\n")
             else:
                 print("\nAsiento Invalido. Intente de nuevo\n")
-            
+        
+        #Llamado a la funcion es_vampiro para validar si la C.I. es un numero vampiro o no   
         if es_vampiro(ci_cliente):
             precio_descuento = precio / 2
             iva = round(precio_descuento * 0.16, 2)
@@ -245,21 +249,25 @@ class App:
             print("\nLa C.I. que ingresó no es vampiro por lo tanto no ha sido beneficiado con un descuento\n")
            
         #Mostramos una factura al cliente con el Asiento, Subtotal, Desc0uento, Iva, Monto Final        
-        print("----- FACTURA DEL CLIENTE ----")
+        print("\n----------------------------------------------------------------")
+        print("                     FACTURA DEL CLIENTE")
+        print("----------------------------------------------------------------")
         print(f"Asiento: {asiento_asig}")
         print(f"Precio Entrada: {precio}")
         print(f"Descuento: {precio_descuento}")
         print(f"Subtotal: {precio - precio_descuento}")
         print(f"IVA (16%): {iva}")
-        print("---------------------------------------")
-        print(f"Total: ${precio_total}")
+        print("-----------------------------------------------------------------")
+        print(f"                                     Total: ${precio_total}")
     
         #Le preguntamos al usuario si desea realizar la compra    
-        pago_ticket = input("Desea realizar su compra del ticket(Si o No)?: ").lower()
+        pago_ticket = input("\nDesea realizar la compra del ticket (Si o No)?: ").lower()
+        while pago_ticket != "si" and pago_ticket != "no":
+            pago_ticket = input("Respuesta inválida, ingrese Si o No: ").lower()
         if pago_ticket == "si":
-            print("Su compra ha sido existosa")
-            codigo_seguridad = generar_codigo_seguridad()
-            ticket = Ticket(ci_cliente, partido, tipo_entrada, asiento_asig, codigo_seguridad)
+            print("\nSu compra ha sido existosa")
+            codigo_seguridad = generar_codigo_seguridad() #Se genra el codigo seguridad unico
+            ticket = Ticket(ci_cliente, partido, tipo_entrada, asiento_asig, codigo_seguridad, precio_total)
             self.clientes.append(datos_cliente)        
             self.tickets.append(ticket)
             print("******************************************************************************************")
@@ -274,39 +282,37 @@ class App:
             elif tipo_entrada == "general":
                 partido.asientos_ocupados_general.append(asiento_asig)
         else:
-            print("Su compra no ha sido procesada con éxito")
+            print("La compra no ha sido procesada ni registrada por solicitud del cliente")
     
-
-#Este metodo se visualiza la gestion de las asistencias de los partidos
+#Metodo Gestion de Asistencias a Partidos
     def gestion_asistencia_partidos(self):
         for partido in self.partidos:
             partido.show()
             
         nro_partido = input("Ingrese el número de partido del ticket que desea consultar: ")
         while not nro_partido.isnumeric() or int(nro_partido) > len(self.partidos):
-                nro_partido = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")               
+                nro_partido = input("\nOpción Invalida. Asegúrese de ingresar un valor numérico válido: ")               
         nro_partido = int(nro_partido)
         for partido in self.partidos:
             if partido.number == nro_partido:
                 break
             
-        
-        codigo_seguridad = input("Ingrese el codigo de seguridad del ticket: ")
         ticket_valido = False
+        codigo_seguridad = input("Ingrese el código de seguridad del ticket: ")
         for ticket in self.tickets:
             if ticket.codigo_seguridad == codigo_seguridad and ticket.partido.number == nro_partido:
                 if ticket.asistencia == False:
                     ticket.asistencia = True
-                    print(f"Ticket: {codigo_seguridad} Valido. Se registró asistencia")
+                    print(f"Ticket: {codigo_seguridad} válido. Se registró asistencia")
                     ticket_valido = True
                     break
                 else:
-                    print(f"Ticket: {codigo_seguridad} invalido. El ticket ya ha sido registrado previamente")
+                    print(f"Ticket: {codigo_seguridad} inválido. El ticket ya ha sido registrado previamente con aistencia")
                     ticket_valido = True                  
         if ticket_valido == False:
-            print(f"Ticket: {codigo_seguridad} es Invalido. No existente")            
+            print(f"Ticket: {codigo_seguridad} inválido. No existente")            
                  
-            
+ #Metodo Gestion de Restaurantes           
     def gestion_restaurantes(self): 
         
         print("\n=======================")
@@ -321,7 +327,7 @@ class App:
             estadio.nombre_show()
         opcion=input("\nSeleccione el número del estadio donde se ubica el restaurante a gestionar: ")
         while not opcion.isnumeric() or int(opcion) > len(self.estadios):
-            opcion = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
+            opcion = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico válido: ")
         index_estadio = int(opcion) - 1
         estadio = self.estadios[index_estadio]
         
@@ -331,9 +337,9 @@ class App:
             i += 1
             print(i)
             restaurante.nombre_show()
-        opcion=input("\nSeleccione el número del restaurante que desea gestionar: ")
+        opcion=input("\nSeleccione el número de restaurante que desea gestionar: ")
         while not opcion.isnumeric() or int(opcion) > len(estadio.restaurantes):
-            opcion = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
+            opcion = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico válido: ")
         index_restaurante = int(opcion) - 1
         restaurante = estadio.restaurantes[index_restaurante]
 
@@ -346,7 +352,7 @@ class App:
             print("3. Buscar Productos por rango de precio")
             print("4. Regresar al Menu Principal\n")
             opcion = input("Ingrese la opción deseada (1-4): ")
-            while not opcion.isnumeric() or int(opcion) > 4:
+            while not opcion.isnumeric() or int(opcion) > 4 or int(opcion) == 0:
                 opcion = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico del 1-4: ")
             opcion = int(opcion)  
             #Opcion 1: Busqueda de un producto por nombre 
@@ -405,13 +411,13 @@ class App:
                 print("=======================================================================================\n")
                 precio_minimo = input("Ingrese el precio mínimo con IVA): ")
                 while not precio_minimo.isnumeric() or float(precio_minimo) < 0:
-                    precio_minimo = input("\n:Precio invalido. El precio minimo debe ser un valor numerico mayor o igual a 0: ") 
+                    precio_minimo = input("\n:Precio inválido. El precio mínimo debe ser un valor numerico mayor o igual a 0: ") 
                 precio_minimo = round(float(precio_minimo) ,2)
-                precio_maximo = input("Ingrese el precio máximo con IVA: ")
+                precio_maximo = input("\nIngrese el precio máximo con IVA: ")
                 while not precio_maximo.isnumeric() or float(precio_maximo) < precio_minimo:
-                    precio_maximo = input("\n:Precio inválido. El precio máximo debe ser un valor numérico mayor al precio mínimo : ")
+                    precio_maximo = input("\n:Precio inválido. El precio máximo debe ser un valor numérico mayor o igual al precio mínimo : ")
                 precio_maximo = round(float(precio_maximo),2)    
-                print("---------------------------------------------------------------------------------------------")
+                print("\n---------------------------------------------------------------------------------------------")
                 print(f"\nListado de productos con precio entre {precio_minimo} y {precio_maximo}")
                 print("---------------------------------------------------------------------------------------------\n")
                 encontrado = False
@@ -425,9 +431,7 @@ class App:
             elif opcion == 4:
                 break
         
-   
-    
-#Este metodo se visualiza la gestion de las ventas de restaurantes
+#Metodo Gestion de Ventas de Restaurantes
     def gestion_ventas_restaurantes(self):
         print("\n==============================")
         print("Gestion de Venta en Restaurantes")
@@ -440,7 +444,7 @@ class App:
             estadio.nombre_show()
         respuesta=input("\nSeleccione el número del estadio donde se ubica el restaurante a gestionar: ")
         while not respuesta.isnumeric() or int(respuesta) > len(self.estadios):
-            respuesta = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
+            respuesta = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico válido: ")
         index_estadio = int(respuesta) - 1
         estadio = self.estadios[index_estadio]
         print(f"\nListado de Restaurantes ubicados en {estadio.name}")
@@ -451,7 +455,7 @@ class App:
             restaurante.nombre_show()
         respuesta=input("\nSeleccione el número del restaurante que desea gestionar: ")
         while not respuesta.isnumeric() or int(respuesta) > len(estadio.restaurantes):
-            respuesta = input("\nOpción Invalida. Asegúrese de ingresar un valor numerico válido: ")
+            respuesta = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico válido: ")
         index_restaurante = int(respuesta) - 1
         restaurante = estadio.restaurantes[index_restaurante]
         
@@ -461,37 +465,37 @@ class App:
             print("=========================================================\n")
             print("1. Procesar Ventas del Restaurante")
             print("2. Regresar al Menu Principal\n")
-            respuesta = input("Ingrese la opción deseada (1-2): ")
+            respuesta = input("\nIngrese la opción deseada (1-2): ")
             while not respuesta.isnumeric() or int(respuesta) > 2:
                 respuesta = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico del 1-2: ")
             respuesta = int(respuesta)  
             if respuesta == 1:
                 productos_por_vender = [] 
-                cedula_identidad = input("Ingrese su C.I: ")
+                cedula_identidad = input("\nIngrese su C.I: ")
                 encontrado = False
                 for cliente in self.clientes:
                     if cliente.cedula == cedula_identidad:
                         encontrado = True        
                         if cliente.entrada == "vip":
-                            print(f"Lista de productos disponibles del restaruant {restaurante.name}")
+                            print(f"\nLista de productos disponibles del restaruant {restaurante.name}")
                             print("---------------------------------------------------------------------------")
                             for i, producto in enumerate(restaurante.products):
                                 i += 1
                                 print(i)
                                 producto.show()
                             while True:
-                                num_product = input("Ingrese el numero del producto que desea vender: ")
+                                num_product = input("Ingrese el número del producto que desea vender: ")
                                 while not num_product.isnumeric() or int(num_product) > len(restaurante.products):
                                     num_product = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico válido: ")
                                 index_product = int(num_product) - 1
                                 producto = restaurante.products[index_product]
                                 if producto.adicional == "alcoholic" and int(cliente.edad) < 18:
-                                    print("Este producto es una bebida alcoholico. No se puede efectuar la venta ")
+                                    print("\nEste producto es una bebida alcoholica. No se puede efectuar la venta ")
                                 else:
                                     productos_por_vender.append(producto)
-                                    respuesta = input("El cliente desea otro producto (Si o No): ").lower()
+                                    respuesta = input("\nEl cliente desea otro producto (Si o No): ").lower()
                                     while respuesta != "si" and respuesta != "no":
-                                        respuesta = input("Respuesta invalida, debe ser (Si o No): ").lower()
+                                        respuesta = input("\nRespuesta inválida, debe ser (Si o No): ").lower()
                                     if respuesta == "no":
                                         monto_total = 0
                                         print("\n----------------------------------------------------------------")
@@ -503,58 +507,87 @@ class App:
                                             print(f"Precio del Producto (Incluye IVA): {producto_facturado.price}")
                                             print(f"Tipo del Producto: {producto_facturado.clasificacion} - {producto_facturado.adicional}\n")
                                             monto_total += producto_facturado.price
-                                        print(f"Subtotal: {monto_total}")
+                                        print(f"\nSubtotal: {monto_total}")
                                             
                                         if es_perfecto(cedula_identidad):
-                                            print(f"La C.I del cliente es un numero perfecto, por lo tanto tiene un descuento del 15%: {monto_total * 0.15}  ")
+                                            print(f"\nLa C.I del cliente es un número perfecto, por lo tanto tiene un descuento del 15%: {monto_total * 0.15}  ")
                                             rebaja = monto_total * 0.15
                                             monto_total = monto_total - rebaja
-                                        print(f"Monto total: {monto_total}")
-                                        respuesta = input("El cliente desea realizar la venta (Si o No): ").lower()
+                                        print("\n----------------------------------------------------------------")
+                                        print(f"                                   Monto total: {monto_total}")
+                                        respuesta = input("\nEl cliente desea realizar la venta (Si o No): ").lower()
                                         while respuesta != "si" and respuesta != "no":
-                                                respuesta = input("Respuesta invalida, debe ser (Si o No): ").lower()  
+                                                respuesta = input("\nRespuesta invalida, debe ser (Si o No): ").lower()  
                                         if respuesta == "si":
                                             for producto_facturado in productos_por_vender:
                                                 producto_facturado.stock -= 1
-                                            print("Venta realizada existosamente")
+                                            print("\nVenta realizada existosamente")
                                             ventas_facturadas = Venta_Restaurant(cliente, productos_por_vender, monto_total)
                                             restaurante.ventas.append(ventas_facturadas)   
                                             break
                                         else:
-                                            print("No se ha realizado la venta")
+                                            print("\nNo se ha procesado ni registrado la venta por solicitud del usuario")
                                             break                           
                         else:
-                            print("La CI no corresponde a un cliente VIP, por lo que no puede efectuar compras")
+                            print("\nLa CI no corresponde a un cliente VIP, por lo que no puede efectuar compras")
                 if not encontrado:
-                    print("Cliente no encontrado. Intente con otra CI")
-                
+                    print("\nCliente no encontrado. Intente con otra CI")
             elif respuesta == 2:
                 break
                 
-    
-    
-    
-        
-#Este metodo se visualiza la gestion de las ventas de restaurantes
+#Metodo Indicadores de Gestion
     def indicadores_gestion(self):
         while True:
-            print("\n-------------------------------------")
+            print("\n================================================================")
             print("Menú Gestión de Indicadores de Gestión")
-            print("-------------------------------------- \n")
+            print("================================================================\n")
             print("1. Mostar el promedio de gasto de un cliente VIP en un partido (ticket + restaurante)? ")
             print("2. Mostrar lista con la asistencia de los partidos de mejor a peor")
             print("3. Mostar el Partido con mayor asistencia")
             print("4. Mostrar el Partido con mayor boletos vendidos")
             print("5. Mostar los Top 3 productos mas vendidos en el restaurante")
             print("6. Mostrar los Top 3 clientes(los que compraron mas boletos)")
-            print("7. Realiza un grafico con las estadisticas mediante con las librerias de matplotib o Bokeh\n")
+            print("7. Realiza un grafico con las estadisticas")
             print("8. Regresar al Menú Principal")
-            opcion = input("Ingrese la opción deseada (1-8): ")
-            while not opcion.isnumeric() or int(opcion) > 8:
-                opcion = input("Opción Inválida. Asegurese de ingresar un valor numérico del 1-8: ")
+            opcion = input("\nIngrese la opción deseada (1-8): ")
+            while not opcion.isnumeric() or int(opcion) > 8 or int(opcion) == 0:
+                opcion = input("\nOpción Inválida. Asegurese de ingresar un valor numérico del 1-8: ")
             opcion = int(opcion)
             if opcion ==1:
-                pass
+                print("\n------------------------------------------------")
+                print("Promedio de gastos de cliente VIP en un partido")
+                print("------------------------------------------------\n")
+                print("\nLista de partidos\n")
+                print("-----------------")
+                for partido in self.partidos:
+                    partido.show()    
+                nro_partido = input("\nIngrese el número de partido: ")
+                while not nro_partido.isnumeric() or int(nro_partido) > len(self.partidos) or int(nro_partido) == 0:
+                    nro_partido = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico válido: ")
+                nro_clientes_partido = 0
+                total_de_gastos_tickets = 0
+                for ticket in self.tickets:
+                    if int(ticket.partido.number) == int(nro_partido) and ticket.tipo_de_asiento == "vip":
+                        nro_clientes_partido += 1
+                        total_de_gastos_tickets += ticket.precio_total
+                total_de_gastos_restaurantes = 0
+                print(f"total_de_gastos_tickets {total_de_gastos_tickets}")
+    
+                for partido in self.partidos:
+                    if int(partido.number) == int(nro_partido):
+                        estadio_id = partido.stadium_id
+                        break
+                for estadio in self.estadios:
+                    if estadio.id == estadio_id:
+                        for restaurante in estadio.restaurantes:
+                            for venta in restaurante.ventas:
+                                total_de_gastos_restaurantes += venta.total  
+                        break                    
+                
+                print(f"Clientes: {nro_clientes_partido}")
+                print(f"Total Gastos Restaurantes {total_de_gastos_restaurantes}")               
+                promedio = (total_de_gastos_tickets + total_de_gastos_restaurantes) / nro_clientes_partido
+                print(f"Promedio: {promedio}")
             elif opcion ==2:
                 pass
             elif opcion ==3:
@@ -570,13 +603,13 @@ class App:
             elif opcion == 8:
                 break 
                 
-#Esta funcion nos permite sacar la informacion de los partidos donde fueron sacado desde la URL
+#Metodo que permite obtener la informacion de las API y carga de datos en listas
     def informacion_partidos(self):
         #Url de los equipos , estadios , partidos 
         url_equipos = "https://raw.githubusercontent.com/Algoritmos-y-Programacion/api-proyecto/main/teams.json"
         url_estadios = "https://raw.githubusercontent.com/Algoritmos-y-Programacion/api-proyecto/main/stadiums.json"
         url_partidos = "https://raw.githubusercontent.com/Algoritmos-y-Programacion/api-proyecto/main/matches.json"
-        #Sacamos la informacion de equipos, estadios, y partidos mediante los URL usando (urllib.request.urlopen)
+        #Obtenemos la informacion de equipos, estadios, y partidos mediante los URL usando (urllib.request.urlopen)
         with urllib.request.urlopen(url_equipos) as response:
             body_json = response.read()
         informacion_equipos = json.loads(body_json)

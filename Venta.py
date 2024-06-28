@@ -8,7 +8,6 @@ class Venta_Restaurant:
     Atributos:\n
     cliente: referencia al objeto cliente\n
     productos: lista de referencias a objeto Producto\n
-    Descuento: descuento por C.I = nro. perfecto\n
     Total: total de la venta\n
     
     Metodos:\n
