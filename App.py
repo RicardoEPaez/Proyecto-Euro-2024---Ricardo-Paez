@@ -603,45 +603,57 @@ class App:
                 pass
             # Opcion 3. que muestra el Partido con mayor asistencia
             elif opcion ==3:
-                pass
-            # Opcion 4. que muestra el Partido con mayor boletos vendidos
+                #Cremamos listas donde se totaliza el numero de tickets que asistieron por juego
+                total_de_asistencia = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                nro_partido_con_mas_asistencia = []
+                for ticket in self.tickets:
+                    if ticket.asistencia == True:
+                        index_partido = int(ticket.partido.number) - 1
+                        total_de_asistencia[index_partido] += 1
+                #Calculamos cual es el maximo de ticket que asistieron
+                max_asistencia = max(total_de_asistencia)
+                #Creamos lista con los numeros de partidos con mayor numero de ticket que asistieron
+                for i in range(0, len(total_de_asistencia)):
+                    if int(total_de_asistencia[i]) == int(max_asistencia):
+                        nro_partido_con_mas_asistencia.append(i+1)
+                print("\n----------------------------------------------------------------------------")
+                print("                    Partido con Mayor Asistencia")
+                print("----------------------------------------------------------------------------\n")
+                #Mostramos la informacion de los partidos con mayor numero de tickets que asistieron
+                for i in range(0, len(nro_partido_con_mas_asistencia)):
+                    for partido in self.partidos:
+                        if int(partido.number) == int(nro_partido_con_mas_asistencia[i]):
+                            partido.show()           
+                print("----------------------------------------------------------------------------")
+                print(f"Total de partidos con Mayor Asistencia: {max_asistencia}")
+                print("----------------------------------------------------------------------------\n")
+                        
+            # Opcion 4. que muestra el Partido con mayor boletos 
             elif opcion == 4:
-                #Desplegamos la lista de partidos al usuario para conocer el numero de partido a seleccionar
-                print("\n------------------------------------------------")
-                print("        Partido con mayor boletos vendidos")
-                print("------------------------------------------------\n")
+                #Cremamos listas donde se totaliza el numero de tickets por juego
                 total_ticket_partido = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
                 nro_partido_con_mas_tickets = []
                 for ticket in self.tickets:
                     index_partido = int(ticket.partido.number) - 1
                     total_ticket_partido[index_partido] += 1  
+                #Calculamos cual es el maximo de ticket
                 max_tickets = max(total_ticket_partido)
-            
+                #Creamos lista con los numeros de partidos con mayor numero de ticket
                 for i in range(0, len(total_ticket_partido)):
                     if int(total_ticket_partido[i]) == int(max_tickets):
                         nro_partido_con_mas_tickets.append(i+1)
-                    
-                
                 print("\n----------------------------------------------------------------------------")
-                print("                    Partido con mayor boletos vendidos")
+                print("                    Partido con Mayor Boletos Vendidos")
                 print("----------------------------------------------------------------------------\n")
+                #Mostramos la informacion de los partidos con mayor numero de tickets
                 for i in range(0, len(nro_partido_con_mas_tickets)):
                     for partido in self.partidos:
                         if int(partido.number) == int(nro_partido_con_mas_tickets[i]):
                             partido.show()
-                            print("----------------------------------------------------------------------------")
-                            print(f"Total de boletos vendidos: {max_tickets}")
-                            print("----------------------------------------------------------------------------\n")
-    
-                    
-                
-
-                    
-                    
-                    
-                    
-                    
-                    
+                print("----------------------------------------------------------------------------")
+                print(f"Total de boletos vendidos: {max_tickets}")
+                print("----------------------------------------------------------------------------\n")
+            
             # Opcion 5. que muestra los Top 3 productos mas vendidos en el restaurante
             elif opcion == 5:
                 pass

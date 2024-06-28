@@ -29,4 +29,4 @@ class Ticket:
       
     def show(self):
         """Muestra en la consola los datos del ticket"""
-        print(f"C.I: {self.cedula}\nPartido: {self.partido}\nTipo de asiento: {self.tipo_de_asiento}\nAsiento: {self.asiento}\nCodigo seguridad: {self.codigo_seguridad}\nMonto Total: {self.monto_total}\n")
+        print(f"C.I: {self.cedula}\nPartido: {self.partido}\nTipo de asiento: {self.tipo_de_asiento}\nAsiento: {self.asiento}\nCodigo seguridad: {self.codigo_seguridad}\nMonto Total: {self.precio_total}\n")
