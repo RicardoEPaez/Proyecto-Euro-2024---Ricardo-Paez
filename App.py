@@ -122,11 +122,11 @@ class App:
         while not nombre_cliente.isalpha():
             nombre_cliente = input("\nIngrese un nombre válido: ").lower()    
         
-        ci_cliente = input("\nIngrese la Cédula de Identidad (C.I) del cliente (No utilice puntos, ni letras. Ejem: 332321): ")    
+        ci_cliente = input("Ingrese la Cédula de Identidad (C.I) del cliente (No utilice puntos, ni letras. Ejem: 332321): ")    
         while not ci_cliente.isdigit():
             ci_cliente = input("\nC.I. inválida. Indique un valor de C.I. correcto: ") 
         
-        edad_cliente = input("\nIngrese la edad del cliente: ")
+        edad_cliente = input("Ingrese la edad del cliente: ")
         while not edad_cliente.isnumeric() or not int(edad_cliente) > 0:
             edad_cliente = input("\nIngrese una edad válida: ")
        
@@ -258,7 +258,7 @@ class App:
         print(f"Subtotal: {precio - precio_descuento}")
         print(f"IVA (16%): {iva}")
         print("-----------------------------------------------------------------")
-        print(f"                                     Total: ${precio_total}")
+        print(f"                                           Total: ${precio_total}")
     
         #Le preguntamos al usuario si desea realizar la compra    
         pago_ticket = input("\nDesea realizar la compra del ticket (Si o No)?: ").lower()
@@ -271,11 +271,11 @@ class App:
             self.clientes.append(datos_cliente)        
             self.tickets.append(ticket)
             print("******************************************************************************************")
-            print(f"                        TICKET {ticket.tipo_de_asiento}                                  ")                           
+            print(f"                               TICKET {ticket.tipo_de_asiento}")                           
             print(f"                          {partido.home.name}  vs {partido.away.name} ")
             print(f"                       Estadio: {partido_stadium.name}")
             print(f"                         Fecha: {partido.date}")
-            print(f"                   Codigo seguridad: {codigo_seguridad}")
+            print(f"                       Codigo seguridad: {codigo_seguridad}")
             print("******************************************************************************************")
             if tipo_entrada == "vip":
                 partido.asientos_ocupados_vip.append(asiento_asig)
@@ -545,20 +545,22 @@ class App:
             print("2. Mostrar lista con la asistencia de los partidos de mejor a peor")
             print("3. Mostar el Partido con mayor asistencia")
             print("4. Mostrar el Partido con mayor boletos vendidos")
-            print("5. Mostar los Top 3 productos mas vendidos en el restaurante")
-            print("6. Mostrar los Top 3 clientes(los que compraron mas boletos)")
-            print("7. Realiza un grafico con las estadisticas")
+            print("5. Mostrar los Top 3 productos mas vendidos en el restaurante")
+            print("6. Mostrar los Top 3 clientes(los que compraron más boletos)")
+            print("7. Realiza un gráfico con las estadísticas")
             print("8. Regresar al Menú Principal")
             opcion = input("\nIngrese la opción deseada (1-8): ")
             while not opcion.isnumeric() or int(opcion) > 8 or int(opcion) == 0:
                 opcion = input("\nOpción Inválida. Asegurese de ingresar un valor numérico del 1-8: ")
             opcion = int(opcion)
+            # Opcion 1. que muestra el promedio de gasto de un cliente VIP en un partido (ticket + restaurante)? ")
             if opcion ==1:
+                #Desplegamos la lista de partidos al usuario para conocer el numero de partido a seleccionar
                 print("\n------------------------------------------------")
-                print("Promedio de gastos de cliente VIP en un partido")
+                print("Promedio de gastos de clientes VIP en un partido")
                 print("------------------------------------------------\n")
                 print("\nLista de partidos\n")
-                print("-----------------")
+                print("-----------------\n")
                 for partido in self.partidos:
                     partido.show()    
                 nro_partido = input("\nIngrese el número de partido: ")
@@ -566,40 +568,90 @@ class App:
                     nro_partido = input("\nOpción Inválida. Asegúrese de ingresar un valor numérico válido: ")
                 nro_clientes_partido = 0
                 total_de_gastos_tickets = 0
+                #Recorremos la lista de tickets para conocer el numero de clientes y costo de los tickets VIP
                 for ticket in self.tickets:
                     if int(ticket.partido.number) == int(nro_partido) and ticket.tipo_de_asiento == "vip":
                         nro_clientes_partido += 1
                         total_de_gastos_tickets += ticket.precio_total
                 total_de_gastos_restaurantes = 0
-                print(f"total_de_gastos_tickets {total_de_gastos_tickets}")
-    
+                #Recorremos la lista de partidos para conocer el id del estadio
                 for partido in self.partidos:
                     if int(partido.number) == int(nro_partido):
                         estadio_id = partido.stadium_id
                         break
+                #Recorremos la lista de restaurantes para conocer el total de gastos en restaurantes
                 for estadio in self.estadios:
                     if estadio.id == estadio_id:
                         for restaurante in estadio.restaurantes:
                             for venta in restaurante.ventas:
                                 total_de_gastos_restaurantes += venta.total  
-                        break                    
-                
-                print(f"Clientes: {nro_clientes_partido}")
-                print(f"Total Gastos Restaurantes {total_de_gastos_restaurantes}")               
+                        break     
+                #Calculamos el promedio y desplegamos la informacion               
                 promedio = (total_de_gastos_tickets + total_de_gastos_restaurantes) / nro_clientes_partido
-                print(f"Promedio: {promedio}")
+                print("\n--------------------------------------------------------------------------------------------")
+                print("Promedio de gastos de clientes VIP en un partido (ticket + restaurante) ") 
+                print("-------------------------------------------------------------------------------------------------\n")       
+                print(f"Nro. de Clientes VIP en el partido Nro. {nro_partido}: {nro_clientes_partido}")
+                print(f"Total de Ventas en Tickets: {total_de_gastos_tickets}")
+                print(f"Total Gastos en Restaurantes del estadio {estadio.name}: {total_de_gastos_restaurantes}\n") 
+                print("------------------------------------------------------------------------------------------------")              
+                print(f"Promedio de gastos por cliente: {promedio}")
+                print("------------------------------------------------------------------------------------------------\n")
+                break
+            # Opcion 2. que muestra lista con la asistencia de los partidos de mejor a peor")
             elif opcion ==2:
                 pass
+            # Opcion 3. que muestra el Partido con mayor asistencia
             elif opcion ==3:
                 pass
+            # Opcion 4. que muestra el Partido con mayor boletos vendidos
             elif opcion == 4:
-                pass
+                #Desplegamos la lista de partidos al usuario para conocer el numero de partido a seleccionar
+                print("\n------------------------------------------------")
+                print("        Partido con mayor boletos vendidos")
+                print("------------------------------------------------\n")
+                total_ticket_partido = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                nro_partido_con_mas_tickets = []
+                for ticket in self.tickets:
+                    index_partido = int(ticket.partido.number) - 1
+                    total_ticket_partido[index_partido] += 1  
+                max_tickets = max(total_ticket_partido)
+            
+                for i in range(0, len(total_ticket_partido)):
+                    if int(total_ticket_partido[i]) == int(max_tickets):
+                        nro_partido_con_mas_tickets.append(i+1)
+                    
+                
+                print("\n----------------------------------------------------------------------------")
+                print("                    Partido con mayor boletos vendidos")
+                print("----------------------------------------------------------------------------\n")
+                for i in range(0, len(nro_partido_con_mas_tickets)):
+                    for partido in self.partidos:
+                        if int(partido.number) == int(nro_partido_con_mas_tickets[i]):
+                            partido.show()
+                            print("----------------------------------------------------------------------------")
+                            print(f"Total de boletos vendidos: {max_tickets}")
+                            print("----------------------------------------------------------------------------\n")
+    
+                    
+                
+
+                    
+                    
+                    
+                    
+                    
+                    
+            # Opcion 5. que muestra los Top 3 productos mas vendidos en el restaurante
             elif opcion == 5:
                 pass
+            # Opcion 6. que muestra los Top 3 clientes(los que compraron mas boletos)
             elif opcion ==6:
                 pass
+            # Opcion 7. que muestra un grafico con las estadisticas
             elif opcion == 7:
                 pass
+            # Opcion 8. para regresar al Menu Principal 
             elif opcion == 8:
                 break 
                 
