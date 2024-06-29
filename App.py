@@ -27,7 +27,8 @@ class App:
         #self.productos = []
         self.clientes = []
         self.tickets = []
-        
+        self.ventas_efectuadas = []
+                
 #Metodo para la garga e incio de la aplicacion
     def run(self):
         '''Metodo para la garga e incio de la aplicacion'''
@@ -532,7 +533,8 @@ class App:
                                                 producto_facturado.stock -= 1
                                             print("\nVenta realizada existosamente")
                                             ventas_facturadas = Venta_Restaurant(cliente, productos_por_vender, monto_total)
-                                            restaurante.ventas.append(ventas_facturadas)   
+                                            restaurante.ventas.append(ventas_facturadas)
+                                            self.ventas_efectuadas.append(ventas_facturadas)
                                             break
                                         else:
                                             print("\nNo se ha procesado ni registrado la venta por solicitud del usuario")
@@ -702,12 +704,11 @@ class App:
                 print("----------------------------------------------------------------------------\n")           
             # Opcion 5. que muestra los Top 3 productos mas vendidos en el restaurante
             elif opcion == 5:
-                pass
+                pass                                    
             # Opcion 6. que muestra los Top 3 clientes(los que compraron mas boletos)
             elif opcion ==6:
                 clientes_ordenados = []
                 #Recorremos la lista de clientes para contabilizar los ticket para cada uno de los clientes
-                
                 for cliente in self.clientes:
                     #Recorremos la lista de los tickets para conocer los tickets vendidos y la asistencia
                     encontrado = 0
@@ -724,7 +725,7 @@ class App:
                     else:
                         diccionario = {"cedula": ci_cliente, "tickets": 1}
                         clientes_ordenados.append(diccionario)   
-               #temporal
+                #temporal
                 print(clientes_ordenados)
                 
                 #Ordenamos la lista clientes_ordenados de mayor a menor de acuerdo a la cantidad de tickets
