@@ -705,7 +705,49 @@ class App:
                 pass
             # Opcion 6. que muestra los Top 3 clientes(los que compraron mas boletos)
             elif opcion ==6:
-                pass
+                clientes_ordenados = []
+                #Recorremos la lista de clientes para contabilizar los ticket para cada uno de los clientes
+                
+                for cliente in self.clientes:
+                    #Recorremos la lista de los tickets para conocer los tickets vendidos y la asistencia
+                    encontrado = 0
+                    ci_cliente = cliente.cedula
+                    if len(clientes_ordenados) > 0:
+                        for i in range(len(clientes_ordenados)):
+                            if int(ci_cliente) == int(clientes_ordenados[i]["cedula"]):
+                                clientes_ordenados[i]["tickets"] += 1
+                                encontrado = 1
+                                break
+                        if encontrado == 0:
+                            diccionario = {"cedula": ci_cliente, "tickets": 1}
+                            clientes_ordenados.append(diccionario)  
+                    else:
+                        diccionario = {"cedula": ci_cliente, "tickets": 1}
+                        clientes_ordenados.append(diccionario)   
+               #temporal
+                print(clientes_ordenados)
+                
+                #Ordenamos la lista clientes_ordenados de mayor a menor de acuerdo a la cantidad de tickets
+                for i in range(len(clientes_ordenados)):
+                    for j in range(i+1, len(clientes_ordenados)):
+                        if clientes_ordenados[i]["tickets"] < clientes_ordenados[j]["tickets"]:
+                            clientes_ordenados[i], clientes_ordenados[j] = clientes_ordenados[j], clientes_ordenados[i]
+                #Mostramos los 3 primeros clientes de la lista clientes_ordenados            
+                print("------------------------------------------------------------")
+                print("    Listado de Top 3 clientes que más compraron boletos")
+                print("------------------------------------------------------------")
+                for i in range(len(clientes_ordenados)):  # para el caso que hayan menos de 3 clientes
+                    if i == 3: break #Detenemos el bucle para solo mostrar los tres primeros elementos de la lista clientes_ordenados
+                    for cliente in self.clientes:
+                        if int(cliente.cedula) == int(clientes_ordenados[i]["cedula"]):
+                            print(f"           TOP {i+1}")
+                            print(f"Nombre: {cliente.nombre}")
+                            print(f"   C.I: {cliente.cedula}")
+                            print(f" Edad:: {cliente.edad}")
+                            print(f"Tickets comprados: {clientes_ordenados[i]["tickets"]}")
+                            break
+                    print("------------------------------------------------------------")
+                            
             # Opcion 7. que muestra un grafico con las estadisticas
             elif opcion == 7:
                 pass
