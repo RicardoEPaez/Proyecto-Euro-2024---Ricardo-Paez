@@ -19,7 +19,7 @@ from Utilitarios import *
 class App:
     #Constructor de la clase APP
     def __init__(self):
-        #Se van a guardar las informacion sacadas de las APIS
+        '''Listas para almacenar la informacion de las APIs y las que se generen en la App'''
         self.equipos = []
         self.estadios = []
         self.partidos = []
@@ -30,16 +30,17 @@ class App:
         
 #Metodo para la garga e incio de la aplicacion
     def run(self):
+        '''Metodo para la garga e incio de la aplicacion'''
         self.informacion_partidos()
         print("Bienvenido a la aplicación EURO 2024")
         while True:
             #Despliegue Menu Principal
-            print("\n--------------------------------------")
-            print("          APLICACIÓN EURO 2024          ")
-            print("--------------------------------------\n")
-            print("--------------")
-            print("Menú Principal")
-            print("-------------- \n")
+            print("\n================================================")
+            print("              APLICACIÓN EURO 2024")
+            print("================================================\n")
+            print("------------------------------------------------")
+            print("                 Menú Principal")
+            print("------------------------------------------------\n")
             print("1. Gestión de Partidos y Estadios")
             print("2. Gestión de Ventas de Entradas")
             print("3. Gestión de Asistencia de Partidos")
@@ -47,7 +48,7 @@ class App:
             print("5. Gestión de Ventas de Restarauntes")
             print("6. Indicadores de Gestión (Estadísticas)")
             print("7. Salir del programa de la EURO 2024")
-        
+            #Solicitud de opcion y llamada a la funcion respectiva
             opcion = input("\nIngrese la opción deseada: ")
             while not opcion.isnumeric() or int(opcion) > 7:
                 opcion = input("\nOpción Invalida. Asegurese de ingresar un valor numérico del 1 al 7:  ")
@@ -70,10 +71,11 @@ class App:
  
 #Metodo Gestion de Partidos y Estadios            
     def gestion_partidos_estadios(self):
+        '''Metodo Gestion de Partidos y Estadios '''
         while True:
-            print("\n-------------------------------------")
-            print("Menú Gestión de Partidos y Estadios")
-            print("----------------------------------- \n")
+            print("\n------------------------------------------------")
+            print("       Menú Gestión de Partidos y Estadios")
+            print("------------------------------------------------\n")
             print("1. Mostrar todos los partidos de un pais")
             print("2. Mostrar todos los partidos que se jugarán en un estadio específico")
             print("3. Mostrar todos los partidos que se jugarán en una fecha determinada")
@@ -114,9 +116,12 @@ class App:
             
 #Metodo Gestion de Ventas de Entradas            
     def gestion_ventas_entradas(self):
-        print("\n--------------------------------------------------------")
-        print("                   Datos del cliente")
-        print("--------------------------------------------------------\n")
+        '''Metodo Gestion de Ventas de Entradas'''
+        print("\n------------------------------------------------")
+        print("          Gestión de Ventas de Entradas")
+        print("------------------------------------------------\n")
+        print(" Datos del cliente")
+        print("------------------\n")
         #Les preguntamos al usuario sus datos y hacemos su respectiva validacion por cada input
         nombre_cliente = input("Ingrese el nombre del cliente: ").lower()
         while not nombre_cliente.isalpha():
@@ -145,8 +150,7 @@ class App:
             tipo_entrada = "general"
         
         #Recorremos partido en self.partidos
-        print("\n--------------------------")
-        print("Lista de partidos posibles")
+        print("\nLista de partidos posibles")
         print("--------------------------\n")
         for partido in self.partidos:
             partido.show()
@@ -190,9 +194,9 @@ class App:
         
      
         #Muestra del Mapa de Asientos
-        print("\n-----------------------------------------------------")
+        print("\n---------------------------------------------------------------")
         print(f"Mapa de Asientos del Estadio: {partido_stadium.name}")
-        print("-----------------------------------------------------\n")
+        print("---------------------------------------------------------------\n")
         for nro_fila in range(1, cantidad_filas + 1):
             fila = []
             if nro_fila < cantidad_filas:
@@ -258,7 +262,7 @@ class App:
         print(f"Subtotal: {precio - precio_descuento}")
         print(f"IVA (16%): {iva}")
         print("-----------------------------------------------------------------")
-        print(f"                                           Total: ${precio_total}")
+        print(f"                                             Total: ${precio_total}")
     
         #Le preguntamos al usuario si desea realizar la compra    
         pago_ticket = input("\nDesea realizar la compra del ticket (Si o No)?: ").lower()
@@ -286,6 +290,10 @@ class App:
     
 #Metodo Gestion de Asistencias a Partidos
     def gestion_asistencia_partidos(self):
+        '''Metodo Gestion de Asistencias a Partidos'''
+        print("\n----------------------------------------------------------------")
+        print("                      Listado de Partidos")
+        print("----------------------------------------------------------------\n")
         for partido in self.partidos:
             partido.show()
             
@@ -314,13 +322,12 @@ class App:
                  
  #Metodo Gestion de Restaurantes           
     def gestion_restaurantes(self): 
-        
-        print("\n=======================")
-        print("Gestion de Restaurantes")
-        print("=======================\n")
-        
-        print("\nListado de Estadios")
-        print("-------------------\n")
+        '''Metodo Gestion de Restaurantes '''
+        print("\n---------------------------------------------------------------------")
+        print("                       Gestion de Restaurantes")
+        print("---------------------------------------------------------------------\n")
+        print("                         Listado de Estadios")
+        print("---------------------------------------------------------------------\n")
         for i, estadio in enumerate(self.estadios):
             i += 1
             print(i)
@@ -332,7 +339,7 @@ class App:
         estadio = self.estadios[index_estadio]
         
         print(f"\nListado de Restaurantes ubicados en {estadio.name}")
-        print("--------------------------------------------------------------")
+        print("----------------------------------------------------------------------------------\n")
         for i, restaurante in enumerate(estadio.restaurantes):
             i += 1
             print(i)
@@ -344,9 +351,9 @@ class App:
         restaurante = estadio.restaurantes[index_restaurante]
 
         while True:
-            print("\n========================================================")
-            print(f"Gestion del Restaurante {restaurante.name}")
-            print("=========================================================\n")
+            print("\n-----------------------------------------------------------------------------")
+            print(f"  Gestion del Restaurante {restaurante.name}")
+            print("-----------------------------------------------------------------------------\n")
             print("1. Buscar Productos por nombre")
             print("2. Buscar Productos por tipo")
             print("3. Buscar Productos por rango de precio")
@@ -359,14 +366,14 @@ class App:
             if opcion == 1:
                 encontrado = False
                 print(f"\nBúsqueda de productos del restaurant {restaurante.name} por nombre de producto")
-                print("======================================================================================\n")
+                print("-----------------------------------------------------------------------------------------\n")
                 nombre_producto = input("\nIntroduzca el nombre del producto que desea buscar: ").title()
                 print(nombre_producto)
                 for producto in restaurante.products:
                     if producto.name == nombre_producto:
-                        print("\n------------------------")
+                        print("\n--------------------------------------------------------")
                         print(f"Información del producto:")
-                        print(f"------------------------\n")
+                        print(f"----------------------------------------------------------")
                         producto.show()
                         encontrado = True
                         break
@@ -375,7 +382,7 @@ class App:
             #Opcion 2: Busqueda de un producto por tipo
             elif opcion == 2:
                 print(f"\nBúsqueda de productos del restaurant {restaurante.name} por tipo de producto")
-                print("=======================================================================================\n")
+                print("------------------------------------------------------------------------------------------\n")
                 print("1. Alimento")
                 print("2. Bebida")
                 opcion = input("\nSeleccione el número (1 o 2) del tipo de producto que desea consultar: ")
@@ -408,7 +415,7 @@ class App:
             #Opcion 3: Busqueda de un producto por rango de precio        
             elif opcion == 3:
                 print(f"\nBúsqueda de productos del restaurante {restaurante.name} por rango de precio")
-                print("=======================================================================================\n")
+                print("----------------------------------------------------------------------------------------------\n")
                 precio_minimo = input("Ingrese el precio mínimo con IVA): ")
                 while not precio_minimo.isnumeric() or float(precio_minimo) < 0:
                     precio_minimo = input("\n:Precio inválido. El precio mínimo debe ser un valor numerico mayor o igual a 0: ") 
@@ -433,11 +440,13 @@ class App:
         
 #Metodo Gestion de Ventas de Restaurantes
     def gestion_ventas_restaurantes(self):
-        print("\n==============================")
-        print("Gestion de Venta en Restaurantes")
-        print("================================\n")
-        print("\nListado de Estadios")
-        print("-------------------\n")
+        '''Metodo Gestion de Ventas de Restaurantes'''
+        print("\n----------------------------------------------------------------")
+        print("                Gestion de Venta en Restaurantes")
+        print("----------------------------------------------------------------\n")
+        print("                      Listado de Estadios")
+        print("----------------------------------------------------------------\n")
+
         for i, estadio in enumerate(self.estadios):
             i += 1
             print(i)
@@ -448,7 +457,7 @@ class App:
         index_estadio = int(respuesta) - 1
         estadio = self.estadios[index_estadio]
         print(f"\nListado de Restaurantes ubicados en {estadio.name}")
-        print("--------------------------------------------------------------")
+        print("--------------------------------------------------------------\n")
         for i, restaurante in enumerate(estadio.restaurantes):
             i += 1
             print(i)
@@ -460,9 +469,9 @@ class App:
         restaurante = estadio.restaurantes[index_restaurante]
         
         while True:
-            print("\n========================================================")
-            print(f"Gestion de Ventas Restaurante {restaurante.name}")
-            print("=========================================================\n")
+            print("\n============================================================================")
+            print(f" Gestion de Ventas Restaurante {restaurante.name}")
+            print("=============================================================================\n")
             print("1. Procesar Ventas del Restaurante")
             print("2. Regresar al Menu Principal\n")
             respuesta = input("\nIngrese la opción deseada (1-2): ")
@@ -537,10 +546,11 @@ class App:
                 
 #Metodo Indicadores de Gestion
     def indicadores_gestion(self):
+        '''Metodo Indicadores de Gestion'''
         while True:
-            print("\n================================================================")
-            print("Menú Gestión de Indicadores de Gestión")
-            print("================================================================\n")
+            print("\n----------------------------------------------------------------")
+            print("             Menú Gestión de Indicadores de Gestión")
+            print("------------------------------------------------------------------\n")
             print("1. Mostar el promedio de gasto de un cliente VIP en un partido (ticket + restaurante)? ")
             print("2. Mostrar lista con la asistencia de los partidos de mejor a peor")
             print("3. Mostar el Partido con mayor asistencia")
@@ -561,6 +571,7 @@ class App:
                 print("------------------------------------------------\n")
                 print("\nLista de partidos\n")
                 print("-----------------\n")
+                #Solicitamos el numero de partido
                 for partido in self.partidos:
                     partido.show()    
                 nro_partido = input("\nIngrese el número de partido: ")
@@ -600,11 +611,48 @@ class App:
                 break
             # Opcion 2. que muestra lista con la asistencia de los partidos de mejor a peor")
             elif opcion ==2:
-                pass
+                boletos_vendidos = 0
+                boletos_asistencia = 0
+                partidos_ordenados = []
+                #Recorremos la lista de partidos para obtener la informacion solicitada de cada partido
+                for partido in self.partidos:
+                    nombre_home = partido.home.name 
+                    nombre_away = partido.away.name
+                    stadium_id = partido.stadium_id
+                    #Recorremos la lista de estadio buscar el id del equipo y conocer su nombre
+                    for estadio in self.estadios:
+                        if estadio.id == stadium_id:
+                            nombre_estadio = estadio.name
+                            break
+                    #Recorremos la lista de los tickets para conocer los tickets vendidos y la asistencia
+                    for ticket in self.tickets:
+                        if partido.id == ticket.partido.id:
+                            boletos_vendidos += 1
+                            if ticket.asistencia == True:
+                                boletos_asistencia += 1
+                    #Calculamos la relacion asistencia / boletos vendidos
+                    if boletos_vendidos == 0:
+                        relacion = "N/A"
+                    else:
+                        relacion = round(boletos_asistencia / boletos_vendidos,2) 
+                    #Creamos un dato tipo diccionario para guardar la iformacion a mostrar 
+                    diccionario = {"local": nombre_home, "visitante": nombre_away, "estadio": nombre_estadio, "vendidos": boletos_vendidos, "asistencia": boletos_asistencia, "relacion": relacion} 
+                    #Agregamos el dato tipo diccionario a la lista partidos_ordenados 
+                    partidos_ordenados.append(diccionario)
+                #Ordenamos la lista partidos_ordenado de mayor a menor de acuerdo a la asistencia
+                for i in range(len(partidos_ordenados)):
+                    for j in range(i+1, len(partidos_ordenados)):
+                        if partidos_ordenados[i]["asistencia"] < partidos_ordenados[j]["asistencia"]:
+                            partidos_ordenados[i], partidos_ordenados[j] = partidos_ordenados[j], partidos_ordenados[i]
+                #Mostramos la informacion cabecera y datos
+                print("Equipo Local   Equipo Visitante    Estadio    Boletos Vendidos    Asistencia Relación Asistencia/Venta")
+                print("-------------------------------------------------------------------------------------------")
+                for match in partidos_ordenados:
+                    print(f"{match["local"]}    {match["visitante"]}    {match["estadio"]}    {match["vendidos"]}   {match["asistencia"]}   {match["relacion"]}")                             
             # Opcion 3. que muestra el Partido con mayor asistencia
             elif opcion ==3:
-                #Cremamos listas donde se totaliza el numero de tickets que asistieron por juego
-                total_de_asistencia = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                #Cremamos lista total_asistencia donde se totaliza el numero de tickets que asistieron por juego y se inicializa en 0
+                total_de_asistencia = [0] * 36         
                 nro_partido_con_mas_asistencia = []
                 for ticket in self.tickets:
                     if ticket.asistencia == True:
@@ -626,12 +674,11 @@ class App:
                             partido.show()           
                 print("----------------------------------------------------------------------------")
                 print(f"Total de partidos con Mayor Asistencia: {max_asistencia}")
-                print("----------------------------------------------------------------------------\n")
-                        
+                print("----------------------------------------------------------------------------\n")                    
             # Opcion 4. que muestra el Partido con mayor boletos 
             elif opcion == 4:
-                #Cremamos listas donde se totaliza el numero de tickets por juego
-                total_ticket_partido = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                #Cremamos lista total_ticket_partido donde se totaliza el numero de tickets por juego y se inicializa en 0
+                total_ticket_partido = [0] * 36
                 nro_partido_con_mas_tickets = []
                 for ticket in self.tickets:
                     index_partido = int(ticket.partido.number) - 1
@@ -652,8 +699,7 @@ class App:
                             partido.show()
                 print("----------------------------------------------------------------------------")
                 print(f"Total de boletos vendidos: {max_tickets}")
-                print("----------------------------------------------------------------------------\n")
-            
+                print("----------------------------------------------------------------------------\n")           
             # Opcion 5. que muestra los Top 3 productos mas vendidos en el restaurante
             elif opcion == 5:
                 pass
@@ -669,6 +715,7 @@ class App:
                 
 #Metodo que permite obtener la informacion de las API y carga de datos en listas
     def informacion_partidos(self):
+        '''Metodo que permite obtener la informacion de las API y carga de datos en listas'''
         #Url de los equipos , estadios , partidos 
         url_equipos = "https://raw.githubusercontent.com/Algoritmos-y-Programacion/api-proyecto/main/teams.json"
         url_estadios = "https://raw.githubusercontent.com/Algoritmos-y-Programacion/api-proyecto/main/stadiums.json"
