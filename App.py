@@ -4,7 +4,6 @@ import json
 import math
 import urllib.request
 import requests
-#Importamos las clases que creamos anteriormente a este clase
 from Equipo import Equipo
 from Estadio import Estadio
 from Partido import Partido
@@ -25,7 +24,7 @@ class App:
         self.estadios = []
         self.partidos = []
         self.restaurantes = []
-        #self.productos = []
+        self.productos = []
         self.clientes = []
         self.tickets = []
         self.ventas_efectuadas = []
@@ -101,6 +100,11 @@ class App:
                         file.write("Equipo Local:" + "\n" + str(partido.home) + "\n")   
                         file.write("Equipo Visitante:" + "\n" + str(partido.away) + "\n")   
                         
+                #Escribir lista de productos en archivo txt
+                with open("productos.txt", "w", encoding="utf8") as file:
+                    for producto in self.productos:
+                        file.write("Información Producto:" + "\n" + str(producto) + "\n")  
+                
                 #Escribir lista de ventas en archivo txt
                 with open("ventas.txt", "w", encoding="utf8") as file:
                     for venta in self.ventas_efectuadas:
@@ -642,25 +646,30 @@ class App:
                             for venta in restaurante.ventas:
                                 total_de_gastos_restaurantes += venta.total  
                         break     
-                #Calculamos el promedio y desplegamos la informacion               
-                promedio = (total_de_gastos_tickets + total_de_gastos_restaurantes) / nro_clientes_partido
-                print("\n--------------------------------------------------------------------------------------------")
-                print("Promedio de gastos de clientes VIP en un partido (ticket + restaurante) ") 
-                print("-------------------------------------------------------------------------------------------------\n")       
-                print(f"Nro. de Clientes VIP en el partido Nro. {nro_partido}: {nro_clientes_partido}")
-                print(f"Total de Ventas en Tickets: {total_de_gastos_tickets}")
-                print(f"Total Gastos en Restaurantes del estadio {estadio.name}: {total_de_gastos_restaurantes}\n") 
-                print("------------------------------------------------------------------------------------------------")              
-                print(f"Promedio de gastos por cliente: {promedio}")
-                print("------------------------------------------------------------------------------------------------\n")
-                break
+                #Calculamos el promedio y desplegamos la informacion   
+                if nro_clientes_partido != 0:           
+                    promedio = (total_de_gastos_tickets + total_de_gastos_restaurantes) / nro_clientes_partido
+                    print("\n--------------------------------------------------------------------------------------------")
+                    print("Promedio de gastos de clientes VIP en un partido (ticket + restaurante) ") 
+                    print("-------------------------------------------------------------------------------------------------\n")       
+                    print(f"Nro. de Clientes VIP en el partido Nro. {nro_partido}: {nro_clientes_partido}")
+                    print(f"Total de Ventas en Tickets: {total_de_gastos_tickets}")
+                    print(f"Total Gastos en Restaurantes del estadio {estadio.name}: {total_de_gastos_restaurantes}\n") 
+                    print("------------------------------------------------------------------------------------------------")              
+                    print(f"Promedio de gastos por cliente: {promedio}")
+                    print("------------------------------------------------------------------------------------------------\n")
+                else:
+                    print("\nNo hay clientes VIP en el partido seleccionado")
+                    
             # Opcion 2. que muestra lista con la asistencia de los partidos de mejor a peor")
             elif opcion ==2:
-                boletos_vendidos = 0
-                boletos_asistencia = 0
+                
+               
                 partidos_ordenados = []
                 #Recorremos la lista de partidos para obtener la informacion solicitada de cada partido
                 for partido in self.partidos:
+                    boletos_vendidos = 0
+                    boletos_asistencia = 0
                     nombre_home = partido.home.name 
                     nombre_away = partido.away.name
                     stadium_id = partido.stadium_id
@@ -772,26 +781,29 @@ class App:
                 print("          Listado de Top 3 productos más vendidos")
                 print("-----------------------------------------------------------------")
                 posicion_top = 1
-                cantidad_producto_top = productos_ordenados[0]["cantidad_vendida"]
-                print(f"                        TOP {posicion_top}")
-                print("------------------------------------------------------------")
-                #Recorremos la lista ya ordenada
-                for i in range(len(productos_ordenados)):  
-                    #Condicional para detectar cuando cambia la posicion TOP de acuerdo a la cantidad de productos facturados
-                    if int(productos_ordenados[i]["cantidad_vendida"]) != int(cantidad_producto_top):
-                        cantidad_producto_top = productos_ordenados[i]["cantidad_vendida"]
-                        posicion_top += 1
-                        if posicion_top == 4: break
-                        print(f"                        TOP {posicion_top}")
+                if len(productos_ordenados) != 0:
+                    cantidad_producto_top = productos_ordenados[0]["cantidad_vendida"]
+                    print(f"                        TOP {posicion_top}")
+                    print("------------------------------------------------------------")
+                    #Recorremos la lista ya ordenada
+                    for i in range(len(productos_ordenados)):  
+                        #Condicional para detectar cuando cambia la posicion TOP de acuerdo a la cantidad de productos facturados
+                        if int(productos_ordenados[i]["cantidad_vendida"]) != int(cantidad_producto_top):
+                            cantidad_producto_top = productos_ordenados[i]["cantidad_vendida"]
+                            posicion_top += 1
+                            if posicion_top == 4: break
+                            print(f"                        TOP {posicion_top}")
+                            print("------------------------------------------------------------")
+                        for producto in self.productos:
+                            if producto.name == productos_ordenados[i]["nombre"]:
+                                print(f"Nombre del Producto: {producto.name}")
+                                print(f"      Clasificación: {producto.clasificacion}")
+                                print(f"          Adicional: {producto.adicional}")
+                                print(f"   Cantidad Vendida: {productos_ordenados[i]["cantidad_vendida"]}")
+                                break
                         print("------------------------------------------------------------")
-                    for producto in self.productos:
-                        if producto.name == productos_ordenados[i]["nombre"]:
-                            print(f"Nombre del Producto: {producto.name}")
-                            print(f"      Clasificación: {producto.clasificacion}")
-                            print(f"          Adicional: {producto.adicional}")
-                            print(f"   Cantidad Vendida: {productos_ordenados[i]["cantidad_vendida"]}")
-                            break
-                    print("------------------------------------------------------------")                                                 
+                else:
+                    print("\nNo existen productos facturados")                                                 
             # Opcion 6. que muestra los Top 3 clientes(los que compraron mas boletos)
             elif opcion ==6:
                 clientes_ordenados = []
@@ -823,27 +835,31 @@ class App:
                 print("    Listado de Top 3 clientes que más compraron boletos")
                 print("------------------------------------------------------------")
                 posicion_top = 1
-                cantidad_ticket_top = clientes_ordenados[0]["tickets"]
-                print(f"                       TOP {posicion_top}")
-                print("------------------------------------------------------------")
-                #Recorremos la lista ya ordenada
-                for i in range(len(clientes_ordenados)): 
-                    #Condicional para detectar cuando cambia la posicion TOP de acuerdo a la cantidad de tickets comprados por cada cliente 
-                    if int(clientes_ordenados[i]["tickets"]) != int(cantidad_ticket_top):
-                        cantidad_ticket_top = clientes_ordenados[i]["tickets"]
-                        posicion_top += 1
-                        if posicion_top == 4: break
-                        print(f"                       TOP {posicion_top}")
+                
+                if len(clientes_ordenados) != 0: 
+                    cantidad_ticket_top = clientes_ordenados[0]["tickets"]
+                    print(f"                       TOP {posicion_top}")
+                    print("------------------------------------------------------------")
+                    #Recorremos la lista ya ordenada
+                    for i in range(len(clientes_ordenados)): 
+                        #Condicional para detectar cuando cambia la posicion TOP de acuerdo a la cantidad de tickets comprados por cada cliente 
+                        if int(clientes_ordenados[i]["tickets"]) != int(cantidad_ticket_top):
+                            cantidad_ticket_top = clientes_ordenados[i]["tickets"]
+                            posicion_top += 1
+                            if posicion_top == 4: break
+                            print(f"                       TOP {posicion_top}")
+                            print("------------------------------------------------------------")
+                        #Despliegue de la informacion del cliente, ls posicion TOP y la cantidad de tickets comprados
+                        for cliente in self.clientes:
+                            if int(cliente.cedula) == int(clientes_ordenados[i]["cedula"]):
+                                print(f"Nombre: {cliente.nombre}")
+                                print(f"   C.I: {cliente.cedula}")
+                                print(f"  Edad: {cliente.edad}")
+                                print(f"Tickets comprados: {clientes_ordenados[i]["tickets"]}")
+                                break
                         print("------------------------------------------------------------")
-                    #Despliegue de la informacion del cliente, ls posicion TOP y la cantidad de tickets comprados
-                    for cliente in self.clientes:
-                        if int(cliente.cedula) == int(clientes_ordenados[i]["cedula"]):
-                            print(f"Nombre: {cliente.nombre}")
-                            print(f"   C.I: {cliente.cedula}")
-                            print(f"  Edad: {cliente.edad}")
-                            print(f"Tickets comprados: {clientes_ordenados[i]["tickets"]}")
-                            break
-                    print("------------------------------------------------------------")                      
+                else:
+                    print("\n No existen clientes registrados")                      
             # Opcion 7. que muestra graficos de estadisticas
             elif opcion == 7:
                 while True:
@@ -904,8 +920,7 @@ class App:
                         # Mostrar el gráfico
                         plt.tight_layout()
                         plt.show()
-                    elif opcion == 2:
-                                
+                    elif opcion == 2:       
                         clientes_ordenados = []
                         #Recorremos la lista de clientes para contabilizar los ticket para cada uno de los clientes
                         for cliente in self.clientes:
@@ -926,41 +941,44 @@ class App:
                                 clientes_ordenados.append(diccionario)   
                         
                         #Ordenamos la lista clientes_ordenados de mayor a menor de acuerdo a la cantidad de tickets
-                        for i in range(len(clientes_ordenados)):
-                            for j in range(i+1, len(clientes_ordenados)):
-                                if clientes_ordenados[i]["tickets"] < clientes_ordenados[j]["tickets"]:
-                                    clientes_ordenados[i], clientes_ordenados[j] = clientes_ordenados[j], clientes_ordenados[i]
-                        
-                        # Extraer datos de la lista clientes_ordenados
-                        cedulas = [cliente["cedula"] for cliente in clientes_ordenados]
-                        cantidad_tickets = [cliente["tickets"] for cliente in clientes_ordenados]
+                        if len(clientes_ordenados)  != 0:
+                            for i in range(len(clientes_ordenados)):
+                                for j in range(i+1, len(clientes_ordenados)):
+                                    if clientes_ordenados[i]["tickets"] < clientes_ordenados[j]["tickets"]:
+                                        clientes_ordenados[i], clientes_ordenados[j] = clientes_ordenados[j], clientes_ordenados[i]
+                            
+                            # Extraer datos de la lista clientes_ordenados
+                            cedulas = [cliente["cedula"] for cliente in clientes_ordenados]
+                            cantidad_tickets = [cliente["tickets"] for cliente in clientes_ordenados]
 
-                        # Ordenar juntos por cantidad de tickets (mayor a menor)
-                        datos_ordenados = sorted(zip(cedulas, cantidad_tickets), key=lambda x: x[1], reverse=True)
+                            # Ordenar juntos por cantidad de tickets (mayor a menor)
+                            datos_ordenados = sorted(zip(cedulas, cantidad_tickets), key=lambda x: x[1], reverse=True)
 
-                        cedulas, ncantidad_tickets = zip(*datos_ordenados)
+                            cedulas, ncantidad_tickets = zip(*datos_ordenados)
 
-                        # Top 3 clientes
-                        top_3_cedulas = cedulas[:3]
-                        top_3_cantidad_tickets = cantidad_tickets[:3]
+                            # Top 3 clientes
+                            top_3_cedulas = cedulas[:3]
+                            top_3_cantidad_tickets = cantidad_tickets[:3]
 
-                        # Crear figura y subfigura
-                        fig, ax = plt.subplots(figsize=(12, 6))
+                            # Crear figura y subfigura
+                            fig, ax = plt.subplots(figsize=(12, 6))
 
-                        # Barras apiladas para clientes y tickets
-                        barras1 = ax.bar(top_3_cedulas, top_3_cantidad_tickets, label='Tickets comprados', color='royalblue')
+                            # Barras apiladas para clientes y tickets
+                            barras1 = ax.bar(top_3_cedulas, top_3_cantidad_tickets, label='Tickets comprados', color='royalblue')
 
-                        # Personalizar el gráfico
-                        ax.set_title('Top 3 clientes con más tickets comprados')
-                        ax.set_xlabel('Cédula del cliente')
-                        ax.set_ylabel('Cantidad')
-                        ax.set_xticks(range(len(top_3_cedulas)))
-                        ax.set_xticklabels(top_3_cedulas)
-                        ax.legend()
+                            # Personalizar el gráfico
+                            ax.set_title('Top 3 clientes con más tickets comprados')
+                            ax.set_xlabel('Cédula del cliente')
+                            ax.set_ylabel('Cantidad')
+                            ax.set_xticks(range(len(top_3_cedulas)))
+                            ax.set_xticklabels(top_3_cedulas)
+                            ax.legend()
 
-                        # Mostrar el gráfico
-                        plt.tight_layout()
-                        plt.show()
+                            # Mostrar el gráfico
+                            plt.tight_layout()
+                            plt.show()
+                        else:
+                            print("\nNo hay clientes registrados en el sistema.")
                     else:
                         break  
             # Opcion 8. para regresar al Menu Principal 
@@ -1007,7 +1025,7 @@ class App:
                     product = Producto(product["name"], product["quantity"], round(float(product["price"]) * 1.16,2), product["stock"], clasificacion, product["adicional"])
                     #Se le agreamos a la lista vacia de los productos internos le vamos agregando el objeto creado (product) y tambien se lo agregamos self.productos
                     productos_internos.append(product)
-                    #self.productos.append(product)
+                    self.productos.append(product)
                 #Creamos un objeto donde vamos a guardar la informacion, tambien se lo vamos a agregar a restaurantes_internos que es listaaa vacia, y a self.restaruantes
                 restaurant = Restaurant(restaurant["name"], productos_internos)
                 restaurantes_internos.append(restaurant)
