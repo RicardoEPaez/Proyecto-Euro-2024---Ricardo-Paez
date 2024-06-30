@@ -1,4 +1,5 @@
 #Importamos json, la libreria math, la libreria requests, y la liberia urllib.request
+import matplotlib.pyplot as plt
 import json
 import math
 import urllib.request
@@ -24,7 +25,7 @@ class App:
         self.estadios = []
         self.partidos = []
         #self.restaurantes = []
-        #self.productos = []
+        self.productos = []
         self.clientes = []
         self.tickets = []
         self.ventas_efectuadas = []
@@ -189,9 +190,9 @@ class App:
             #Le asignacmos asiento vip un valor
             precio = 75
         
-        #Creamos una lista de abecedeario que van hacer las columnas
+        #Creamos una lista de abecedeario para identificar las columnas
         columna_asientos = ["A","B","C","D","E","F","G","H","I","J"]
-        cantidad_filas = math.ceil(capacidad_asientos/10)
+        cantidad_filas = math.ceil(capacidad_asientos/10) #obtenemos el numero entero superior cuando la division tiene resto
         
      
         #Muestra del Mapa de Asientos
@@ -257,27 +258,27 @@ class App:
         print("\n----------------------------------------------------------------")
         print("                     FACTURA DEL CLIENTE")
         print("----------------------------------------------------------------")
-        print(f"Asiento: {asiento_asig}")
-        print(f"Precio Entrada: {precio}")
-        print(f"Descuento: {precio_descuento}")
-        print(f"Subtotal: {precio - precio_descuento}")
-        print(f"IVA (16%): {iva}")
+        print(f"           Asiento: {asiento_asig}")
+        print(f"    Precio Entrada: {precio}")
+        print(f"         Descuento: {precio_descuento}")
+        print(f"          Subtotal: {precio - precio_descuento}")
+        print(f"         IVA (16%): {iva}")
         print("-----------------------------------------------------------------")
         print(f"                                             Total: ${precio_total}")
     
         #Le preguntamos al usuario si desea realizar la compra    
-        pago_ticket = input("\nDesea realizar la compra del ticket (Si o No)?: ").lower()
+        pago_ticket = input("\nDesea realizar la venta del ticket (Si o No)?: ").lower()
         while pago_ticket != "si" and pago_ticket != "no":
             pago_ticket = input("Respuesta inválida, ingrese Si o No: ").lower()
         if pago_ticket == "si":
-            print("\nSu compra ha sido existosa")
+            print("\nLa compra ha sido existosa y fue registrada")
             codigo_seguridad = generar_codigo_seguridad() #Se genra el codigo seguridad unico
             ticket = Ticket(ci_cliente, partido, tipo_entrada, asiento_asig, codigo_seguridad, precio_total)
             self.clientes.append(datos_cliente)        
             self.tickets.append(ticket)
             print("******************************************************************************************")
             print(f"                               TICKET {ticket.tipo_de_asiento}")                           
-            print(f"                          {partido.home.name}  vs {partido.away.name} ")
+            print(f"                   {partido.home.name}  vs {partido.away.name} ")
             print(f"                       Estadio: {partido_stadium.name}")
             print(f"                         Fecha: {partido.date}")
             print(f"                       Codigo seguridad: {codigo_seguridad}")
@@ -525,13 +526,13 @@ class App:
                                             monto_total = monto_total - rebaja
                                         print("\n----------------------------------------------------------------")
                                         print(f"                                   Monto total: {monto_total}")
-                                        respuesta = input("\nEl cliente desea realizar la venta (Si o No): ").lower()
+                                        respuesta = input("\nEl cliente desea realizar la compra (Si o No)?: ").lower()
                                         while respuesta != "si" and respuesta != "no":
                                                 respuesta = input("\nRespuesta invalida, debe ser (Si o No): ").lower()  
                                         if respuesta == "si":
                                             for producto_facturado in productos_por_vender:
                                                 producto_facturado.stock -= 1
-                                            print("\nVenta realizada existosamente")
+                                            print("\nVenta realizada y registrada existosamente")
                                             ventas_facturadas = Venta_Restaurant(cliente, productos_por_vender, monto_total)
                                             restaurante.ventas.append(ventas_facturadas)
                                             self.ventas_efectuadas.append(ventas_facturadas)
@@ -559,7 +560,7 @@ class App:
             print("4. Mostrar el Partido con mayor boletos vendidos")
             print("5. Mostrar los Top 3 productos mas vendidos en el restaurante")
             print("6. Mostrar los Top 3 clientes(los que compraron más boletos)")
-            print("7. Realiza un gráfico con las estadísticas")
+            print("7. Mostrar grafico de TOP 3 productos facturados")
             print("8. Regresar al Menú Principal")
             opcion = input("\nIngrese la opción deseada (1-8): ")
             while not opcion.isnumeric() or int(opcion) > 8 or int(opcion) == 0:
@@ -702,9 +703,50 @@ class App:
                 print("----------------------------------------------------------------------------")
                 print(f"Total de boletos vendidos: {max_tickets}")
                 print("----------------------------------------------------------------------------\n")           
-            # Opcion 5. que muestra los Top 3 productos mas vendidos en el restaurante
+            # Opcion 5. que muestra los Top 3 productos mas vendidos 
             elif opcion == 5:
-                pass                                    
+                productos_ordenados = []
+                #Recorremos la lista de productos_facturados para contabilizar los productos vendidos
+                for venta in self.ventas_efectuadas:
+                    for i in range(len(venta.productos)):
+                        nombre_producto = venta.productos[i].name
+                        encontrado = 0
+                        for j in range(len(productos_ordenados)):
+                            if nombre_producto == productos_ordenados[j]["nombre"]:
+                                productos_ordenados[j]["cantidad_vendida"] += 1
+                                encontrado = 1
+                                break
+                        if encontrado == 0:
+                            diccionario = {"nombre": nombre_producto, "cantidad_vendida": 1}
+                            productos_ordenados.append(diccionario)  
+                
+                #Ordenamos la lista productos_ordenados de mayor a menor de acuerdo a la cantidad de productos vendidos
+                for i in range(len(productos_ordenados)):
+                    for j in range(i+1, len(productos_ordenados)):
+                        if productos_ordenados[i]["cantidad_vendida"] < productos_ordenados[j]["cantidad_vendida"]:
+                            productos_ordenados[i], productos_ordenados[j] = productos_ordenados[j], productos_ordenados[i]
+                #Mostramos los 3 primeros productos de la lista productos_ordenados            
+                print("-----------------------------------------------------------------")
+                print("          Listado de Top 3 productos más vendidos")
+                print("-----------------------------------------------------------------")
+                posicion_top = 1
+                cantidad_producto_top = productos_ordenados[0]["cantidad_vendida"]
+                #Recorremos la lista ya ordenada
+                for i in range(len(productos_ordenados)):  
+                    #Condicional para detectar cuando cambia la posicion TOP de acuerdo a la cantidad de productos facturados
+                    if int(productos_ordenados[i]["cantidad_vendida"]) != int(cantidad_producto_top):
+                        cantidad_producto_top = productos_ordenados[i]["cantidad_vendida"]
+                        posicion_top += 1
+                    for producto in self.productos:
+                        if producto.name == productos_ordenados[i]["nombre"]:
+                            print(f"                 TOP {posicion_top}")
+                            print("------------------------------------------------------------")
+                            print(f"Nombre del Producto: {producto.name}")
+                            print(f"      Clasificación: {producto.clasificacion}")
+                            print(f"          Adicional: {producto.adicional}")
+                            print(f"   Cantidad Vendida: {productos_ordenados[i]["cantidad_vendida"]}")
+                            break
+                    print("------------------------------------------------------------")                                                 
             # Opcion 6. que muestra los Top 3 clientes(los que compraron mas boletos)
             elif opcion ==6:
                 clientes_ordenados = []
@@ -725,8 +767,6 @@ class App:
                     else:
                         diccionario = {"cedula": ci_cliente, "tickets": 1}
                         clientes_ordenados.append(diccionario)   
-                #temporal
-                print(clientes_ordenados)
                 
                 #Ordenamos la lista clientes_ordenados de mayor a menor de acuerdo a la cantidad de tickets
                 for i in range(len(clientes_ordenados)):
@@ -737,22 +777,30 @@ class App:
                 print("------------------------------------------------------------")
                 print("    Listado de Top 3 clientes que más compraron boletos")
                 print("------------------------------------------------------------")
-                for i in range(len(clientes_ordenados)):  # para el caso que hayan menos de 3 clientes
-                    if i == 3: break #Detenemos el bucle para solo mostrar los tres primeros elementos de la lista clientes_ordenados
+                posicion_top = 1
+                cantidad_ticket_top = clientes_ordenados[0]["tickets"]
+                #Recorremos la lista ya ordenada
+                for i in range(len(clientes_ordenados)): 
+                    #Condicional para detectar cuando cambia la posicion TOP de acuerdo a la cantidad de tickets comprados por cada cliente 
+                    if int(clientes_ordenados[i]["tickets"]) != int(cantidad_ticket_top):
+                        cantidad_ticket_top = clientes_ordenados[i]["tickets"]
+                        posicion_top += 1
+                    #Despliegue de la informacion del cliente, ls posicion TOP y la cantidad de tickets comprados
                     for cliente in self.clientes:
                         if int(cliente.cedula) == int(clientes_ordenados[i]["cedula"]):
-                            print(f"           TOP {i+1}")
+                            print(f"                  TOP {posicion_top}")
+                            print("------------------------------------------------------------")
                             print(f"Nombre: {cliente.nombre}")
                             print(f"   C.I: {cliente.cedula}")
-                            print(f" Edad:: {cliente.edad}")
+                            print(f"  Edad: {cliente.edad}")
                             print(f"Tickets comprados: {clientes_ordenados[i]["tickets"]}")
                             break
-                    print("------------------------------------------------------------")
-                            
+                    print("------------------------------------------------------------")                        
             # Opcion 7. que muestra un grafico con las estadisticas
             elif opcion == 7:
+                #Grafico Top 3 productos mas vendidos en un restaurante
                 pass
-            # Opcion 8. para regresar al Menu Principal 
+                # Opcion 8. para regresar al Menu Principal 
             elif opcion == 8:
                 break 
                 
@@ -796,7 +844,7 @@ class App:
                     product = Producto(product["name"], product["quantity"], round(float(product["price"]) * 1.16,2), product["stock"], clasificacion, product["adicional"])
                     #Se le agreamos a la lista vacia de los productos internos le vamos agregando el objeto creado (product) y tambien se lo agregamos self.productos
                     productos_internos.append(product)
-                    #self.productos.append(product)
+                    self.productos.append(product)
                 #Creamos un objeto donde vamos a guardar la informacion, tambien se lo vamos a agregar a restaurantes_internos que es listaaa vacia, y a self.restaruantes
                 restaurant = Restaurant(restaurant["name"], productos_internos)
                 restaurantes_internos.append(restaurant)
