@@ -37,4 +37,4 @@ class Partido:
     #Metodo para formato en archivo txt      
     def __str__(self):
         """Formato para escribir informacion del partido en archivo txt"""
-        return f"Numero de Partido: {self.number}, ID Partido: {self.id}, Equipo Local: {self.home.name}, Equipo Visitante: {self.away.name}, Fecha: {self.date}, Grupo: {self.group}, ID del estaio: {self.stadium_id}"   
+        return f"Numero de Partido: {self.number}, ID Partido: {self.id}, Equipo Local: {self.home.name}, Equipo Visitante: {self.away.name}, Fecha: {self.date}, Grupo: {self.group}, ID del estaio: {self.stadium_id}, Asientos VIP Ocupados: {self.asientos_ocupados_vip}, Asientos General Ocupados: {self.asientos_ocupados_general}"   
