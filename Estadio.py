@@ -31,3 +31,8 @@ class Estadio:
     def nombre_show(self):
         """Muestra en la cosola el nombre de un estadio"""
         print(self.name)
+    
+    #Metodo para formato en archivo txt  
+    def __str__(self):
+        """Formato para escribir informacion del estadio en archivo txt"""  
+        return f"ID del Estadio: {self.id}, Nombre: {self.name}, Ciudad: {self.city}, Capacidad: {self.capacity}"

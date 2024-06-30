@@ -24,8 +24,8 @@ class App:
         self.equipos = []
         self.estadios = []
         self.partidos = []
-        #self.restaurantes = []
-        self.productos = []
+        self.restaurantes = []
+        #self.productos = []
         self.clientes = []
         self.tickets = []
         self.ventas_efectuadas = []
@@ -68,6 +68,48 @@ class App:
             elif opcion == 6:
                 self.indicadores_gestion()
             elif opcion == 7:
+                
+                #Escribir lista de equipos en archivo txt
+                with open("equipos.txt", "w", encoding="utf8") as file:
+                    for equipo in self.equipos:
+                        file.write("Información Equipo:" + "\n" + str(equipo) + "\n")  
+                        
+                #Escribir lista de estadios, restaurantes y productos en archivo txt
+                with open("estadios.txt", "w", encoding="utf8") as file:
+                    for estadio in self.estadios:
+                        file.write("Información Estadio:" + "\n" + str(estadio) + "\n")
+                        for restaurante in estadio.restaurantes:
+                            file.write("Información Restaurante:" + "\n" + str(restaurante) + "\n")
+                            for producto in restaurante.products:
+                                file.write("Información Producto:" + "\n" + str(producto) + "\n")
+                
+                #Escribir lista de clientes en archivo txt
+                with open("clientes.txt", "w", encoding="utf8") as file:
+                    for cliente in self.clientes:
+                        file.write("Información Cliente:" + "\n" + str(cliente) + "\n")  
+                                      
+                #Escribir lista de tickets en archivo txt
+                with open("tickets.txt", "w", encoding="utf8") as file:
+                    for ticket in self.tickets:
+                        file.write("Información Ticket:" + "\n" + str(ticket) + "\n")  
+                        file.write("Información Partido:" + "\n" + str(ticket.partido) + "\n")
+                        
+                #Escribir lista de partidos en archivo txt
+                with open("partidos.txt", "w", encoding="utf8") as file:
+                    for partido in self.partidos:
+                        file.write("Información Equipo:" + "\n" + str(partido) + "\n")  
+                        file.write("Equipo Local:" + "\n" + str(partido.home) + "\n")   
+                        file.write("Equipo Visitante:" + "\n" + str(partido.away) + "\n")   
+                        
+                #Escribir lista de ventas en archivo txt
+                with open("ventas.txt", "w", encoding="utf8") as file:
+                    for venta in self.ventas_efectuadas:
+                        file.write("Información Cliente:" + "\n" + str(venta.cliente) + "\n")
+                        file.write("Restaurante:" + "\n" + str(venta.restaurante) + "\n")  
+                        for producto in venta.productos:
+                            file.write("Información Producto:" + "\n" + str(producto) + "\n")
+                        file.write("Monto Total de la Venta:" + "\n" + str(venta.total) + "\n")    
+                                
                 print("\nUd. ha salido satisfactoriamente de la alplicación EURO 2024. Hasta pronto.\n")
                 break
  
@@ -533,7 +575,7 @@ class App:
                                             for producto_facturado in productos_por_vender:
                                                 producto_facturado.stock -= 1
                                             print("\nVenta realizada y registrada existosamente")
-                                            ventas_facturadas = Venta_Restaurant(cliente, productos_por_vender, monto_total)
+                                            ventas_facturadas = Venta_Restaurant(cliente, productos_por_vender, restaurante.name, monto_total)
                                             restaurante.ventas.append(ventas_facturadas)
                                             self.ventas_efectuadas.append(ventas_facturadas)
                                             break
@@ -801,9 +843,8 @@ class App:
                             print(f"  Edad: {cliente.edad}")
                             print(f"Tickets comprados: {clientes_ordenados[i]["tickets"]}")
                             break
-                    print("------------------------------------------------------------") 
-                                           
-            # Opcion 7. que muestra un grafico con las estadisticas
+                    print("------------------------------------------------------------")                      
+            # Opcion 7. que muestra graficos de estadisticas
             elif opcion == 7:
                 while True:
                     print("\n----------------------------------------------------------------")
@@ -921,22 +962,8 @@ class App:
                         plt.tight_layout()
                         plt.show()
                     else:
-                        break
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                
-                
-                
-                # Opcion 8. para regresar al Menu Principal 
+                        break  
+            # Opcion 8. para regresar al Menu Principal 
             elif opcion == 8:
                 break 
                 
@@ -980,11 +1007,11 @@ class App:
                     product = Producto(product["name"], product["quantity"], round(float(product["price"]) * 1.16,2), product["stock"], clasificacion, product["adicional"])
                     #Se le agreamos a la lista vacia de los productos internos le vamos agregando el objeto creado (product) y tambien se lo agregamos self.productos
                     productos_internos.append(product)
-                    self.productos.append(product)
+                    #self.productos.append(product)
                 #Creamos un objeto donde vamos a guardar la informacion, tambien se lo vamos a agregar a restaurantes_internos que es listaaa vacia, y a self.restaruantes
                 restaurant = Restaurant(restaurant["name"], productos_internos)
                 restaurantes_internos.append(restaurant)
-                #self.restaurantes.append(restaurant)
+                self.restaurantes.append(restaurant)
             #Creamos un obejto que se va a llamar recinto donde se va a guardar la informacion y se los vamos a agregar a self.estadios
             recinto = Estadio(estadio["id"], estadio["name"], estadio["city"], estadio["capacity"], restaurantes_internos)
             self.estadios.append(recinto)
@@ -1003,3 +1030,4 @@ class App:
             #Creamos un objeto donde vamos a guardar la informacion y se los vamos a agregar a self.partidos   
             juego = Partido(partido["id"],partido["number"], home , away , partido["date"],  partido["group"], partido["stadium_id"])
             self.partidos.append(juego)
+          

@@ -14,11 +14,18 @@ class Venta_Restaurant:
     show: Muestra los datos de la venta"""
     
     #Constructor de la clase Venta_Restaurant 
-    def __init__(self, cliente, productos,  total):
+    def __init__(self, cliente, productos, restaurante, total):
         self.cliente = cliente
         self.productos = productos
+        self.restaurante = restaurante
         self.total = total
+
         
     def show(self):
         """Muestra en la consola los datos de la venta"""
-        print(f"Cliente: {self.cliente.nombre}\nC.I: {self.cliente.cedula}\nProductos: {self.productos}\nTotal: {self.total}\n")
+        print(f"Cliente: {self.cliente.nombre}\nC.I: {self.cliente.cedula}\nProductos: {self.productos}\nNombre Restaurante: {self.restaurante}\nTotal: {self.total}\n")
+        
+    #Metodo para formato en archivo txt      
+    def __str__(self):
+        """Formato para escribir informacion del equipo en archivo txt"""
+        return f": {self.total}"

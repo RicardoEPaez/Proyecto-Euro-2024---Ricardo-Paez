@@ -23,4 +23,9 @@ class Equipo:
     #Metodo que muestra la informacion del equipo    
     def show(self):
         """Muestra en la consola los datos del equipo"""
-        print(f"Id: {self.id}\nCode: {self.code}\nName: {self.name}\nGroup: {self.group}\n")
+        print(f"Id: {self.id}\nCódigo: {self.code}\nNombre: {self.name}\Grupo: {self.group}\n")
+
+    #Metodo para formato en archivo txt      
+    def __str__(self):
+        """Formato para escribir informacion del equipo en archivo txt"""
+        return f"ID: {self.id}, Código: {self.code}, Nombre: {self.name}, Grupo: {self.group}"

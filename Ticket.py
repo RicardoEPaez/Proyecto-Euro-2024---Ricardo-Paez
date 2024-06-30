@@ -30,3 +30,13 @@ class Ticket:
     def show(self):
         """Muestra en la consola los datos del ticket"""
         print(f"C.I: {self.cedula}\nPartido: {self.partido}\nTipo de asiento: {self.tipo_de_asiento}\nAsiento: {self.asiento}\nCodigo seguridad: {self.codigo_seguridad}\nMonto Total: {self.precio_total}\n")
+        
+            #Metodo para formato en archivo txt      
+    def __str__(self):
+        """Formato para escribir informacion del ticket en archivo txt"""
+        return f"C.I: {self.cedula}, Partido: {self.partido}, Tipo de asiento: {self.tipo_de_asiento}, Asiento: {self.asiento}, Codigo seguridad: {self.codigo_seguridad}, Monto Total: {self.precio_total}"   
+    
+    #Metodo para formato en archivo txt  
+    def __str__(self):
+        """Formato para escribir informacion del ticket en archivo txt"""  
+        return f"C.I. : {self.cedula}, Tipo de Asiento: {self.tipo_de_asiento}, Asiento: {self.asiento}, Asistencia: {self.asistencia}, Código de seguridad: {self.codigo_seguridad}, Precio: {self.precio_total}"

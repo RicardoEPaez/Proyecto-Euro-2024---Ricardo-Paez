@@ -25,3 +25,7 @@ class Restaurant:
     def nombre_show(self):
         """Muestra en la cosola el nombre de un restaurant"""
         print(self.name)
+        
+    def __str__(self):
+        """Formato para escribir informacion del restaurante en archivo txt"""
+        return f"Nombre Restaurante: {self.name}"

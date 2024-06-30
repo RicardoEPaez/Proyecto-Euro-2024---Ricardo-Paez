@@ -25,4 +25,8 @@ class Cliente:
     def show(self):
         """Muestra en la consola los datos del cliente"""
         print(f"Nombre: {self.nombre}\nC.I.: {self.cedula}\nEdad: {self.edad}\nPartido: {self.partido}\nEntrada: {self.entrada}\n")
-        
+    
+    #Metodo para formato en archivo txt      
+    def __str__(self):
+        """Formato para escribir informacion del cliente en archivo txt"""
+        return f"Nombre: {self.nombre}, C.I.: {self.cedula}, Edad: {self.edad}, Partido: {self.partido}, Tipo de Entrada: {self.entrada}"

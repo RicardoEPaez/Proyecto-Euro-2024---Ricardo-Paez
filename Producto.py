@@ -28,4 +28,7 @@ class Producto:
     def show(self):
         """Muestra en la consola los datos del producto de venta en un restaurant"""
         print(f"Nonmbre del Producto: {self.name}\nCantidad: {self.quantity}\nPrecio (incluye IVA): {self.price}\nInventario Disponible: {self.stock}\nClasificación: {self.clasificacion}\nAdicional: {self.adicional}\n")
-        
+    
+    def __str__(self):
+        """Formato para escribir informacion del producto en archivo txt"""
+        return f"Nombre Producto: {self.name}, Cantidad: {self.quantity}, Precio (incluye IVA): {self.price}, Inventario: {self.stock}, Clasificación: {self.clasificacion}, Adicional: {self.adicional}"
