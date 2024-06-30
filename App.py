@@ -560,7 +560,7 @@ class App:
             print("4. Mostrar el Partido con mayor boletos vendidos")
             print("5. Mostrar los Top 3 productos mas vendidos en el restaurante")
             print("6. Mostrar los Top 3 clientes(los que compraron más boletos)")
-            print("7. Mostrar grafico de TOP 3 productos facturados")
+            print("7. Mostrar gráficos de estadísticas TOP 3")
             print("8. Regresar al Menú Principal")
             opcion = input("\nIngrese la opción deseada (1-8): ")
             while not opcion.isnumeric() or int(opcion) > 8 or int(opcion) == 0:
@@ -731,16 +731,19 @@ class App:
                 print("-----------------------------------------------------------------")
                 posicion_top = 1
                 cantidad_producto_top = productos_ordenados[0]["cantidad_vendida"]
+                print(f"                        TOP {posicion_top}")
+                print("------------------------------------------------------------")
                 #Recorremos la lista ya ordenada
                 for i in range(len(productos_ordenados)):  
                     #Condicional para detectar cuando cambia la posicion TOP de acuerdo a la cantidad de productos facturados
                     if int(productos_ordenados[i]["cantidad_vendida"]) != int(cantidad_producto_top):
                         cantidad_producto_top = productos_ordenados[i]["cantidad_vendida"]
                         posicion_top += 1
+                        if posicion_top == 4: break
+                        print(f"                        TOP {posicion_top}")
+                        print("------------------------------------------------------------")
                     for producto in self.productos:
                         if producto.name == productos_ordenados[i]["nombre"]:
-                            print(f"                 TOP {posicion_top}")
-                            print("------------------------------------------------------------")
                             print(f"Nombre del Producto: {producto.name}")
                             print(f"      Clasificación: {producto.clasificacion}")
                             print(f"          Adicional: {producto.adicional}")
@@ -779,27 +782,160 @@ class App:
                 print("------------------------------------------------------------")
                 posicion_top = 1
                 cantidad_ticket_top = clientes_ordenados[0]["tickets"]
+                print(f"                       TOP {posicion_top}")
+                print("------------------------------------------------------------")
                 #Recorremos la lista ya ordenada
                 for i in range(len(clientes_ordenados)): 
                     #Condicional para detectar cuando cambia la posicion TOP de acuerdo a la cantidad de tickets comprados por cada cliente 
                     if int(clientes_ordenados[i]["tickets"]) != int(cantidad_ticket_top):
                         cantidad_ticket_top = clientes_ordenados[i]["tickets"]
                         posicion_top += 1
+                        if posicion_top == 4: break
+                        print(f"                       TOP {posicion_top}")
+                        print("------------------------------------------------------------")
                     #Despliegue de la informacion del cliente, ls posicion TOP y la cantidad de tickets comprados
                     for cliente in self.clientes:
                         if int(cliente.cedula) == int(clientes_ordenados[i]["cedula"]):
-                            print(f"                  TOP {posicion_top}")
-                            print("------------------------------------------------------------")
                             print(f"Nombre: {cliente.nombre}")
                             print(f"   C.I: {cliente.cedula}")
                             print(f"  Edad: {cliente.edad}")
                             print(f"Tickets comprados: {clientes_ordenados[i]["tickets"]}")
                             break
-                    print("------------------------------------------------------------")                        
+                    print("------------------------------------------------------------") 
+                                           
             # Opcion 7. que muestra un grafico con las estadisticas
             elif opcion == 7:
-                #Grafico Top 3 productos mas vendidos en un restaurante
-                pass
+                while True:
+                    print("\n----------------------------------------------------------------")
+                    print("             Menú Gráficos de Indicadores de Gestión")
+                    print("------------------------------------------------------------------\n")
+                    print("1. Mostrar Gráfico de los Top 3 productos más vendidos en el restaurante")
+                    print("2. Mostrar Gráfico de los Top 3 clientes con más tickets comprados")
+                    print("3. Regresar al Menú Gestión de Indicadores de Gestión")
+                    opcion = input("\nIngrese la opción deseada (1-3): ")
+                    while not opcion.isnumeric() or int(opcion) > 3 or int(opcion) == 0:
+                        opcion = input("\nOpción Inválida. Asegurese de ingresar un valor numérico del 1-3: ")
+                    opcion = int(opcion)
+                    if opcion == 1:
+                        #Grafico Top 3 productos mas vendidos en un restaurante             
+                        productos_ordenados = []
+                        #Recorremos la lista de productos_facturados para contabilizar los productos vendidos
+                        for venta in self.ventas_efectuadas:
+                            for i in range(len(venta.productos)):
+                                nombre_producto = venta.productos[i].name
+                                encontrado = 0
+                                for j in range(len(productos_ordenados)):
+                                    if nombre_producto == productos_ordenados[j]["nombre"]:
+                                        productos_ordenados[j]["cantidad_vendida"] += 1
+                                        encontrado = 1
+                                        break
+                                if encontrado == 0:
+                                    diccionario = {"nombre": nombre_producto, "cantidad_vendida": 1}
+                                    productos_ordenados.append(diccionario)  
+                        
+                        #Ordenamos la lista productos_ordenados de mayor a menor de acuerdo a la cantidad de productos vendidos
+                        for i in range(len(productos_ordenados)):
+                            for j in range(i+1, len(productos_ordenados)):
+                                if productos_ordenados[i]["cantidad_vendida"] < productos_ordenados[j]["cantidad_vendida"]:
+                                    productos_ordenados[i], productos_ordenados[j] = productos_ordenados[j], productos_ordenados[i]
+                        
+                        nombres_productos = [producto["nombre"] for producto in productos_ordenados]
+                        cantidad_vendida = [producto["cantidad_vendida"] for producto in productos_ordenados]
+
+                        # Top 3 productos
+                        top_3_nombres_productos = nombres_productos[:3]
+                        top_3_cantidad_vendida = cantidad_vendida[:3]
+
+                        # Crear figura y subfigura
+                        fig, ax = plt.subplots(figsize=(10, 6))
+
+                        # Barras para los Top 3 productos
+                        barras = ax.bar(top_3_nombres_productos, top_3_cantidad_vendida, color='royalblue')
+
+                        # Personalizar el gráfico
+                        ax.set_title('Top 3 productos más vendidos')
+                        ax.set_xlabel('Nombre del producto')
+                        ax.set_ylabel('Cantidad vendida')
+                        ax.set_xticks(range(len(top_3_nombres_productos)))
+                        ax.set_xticklabels(top_3_nombres_productos, rotation=45, ha='right')
+                        ax.bar_label(barras)
+
+                        # Mostrar el gráfico
+                        plt.tight_layout()
+                        plt.show()
+                    elif opcion == 2:
+                                
+                        clientes_ordenados = []
+                        #Recorremos la lista de clientes para contabilizar los ticket para cada uno de los clientes
+                        for cliente in self.clientes:
+                            #Recorremos la lista de los tickets para conocer los tickets vendidos y la asistencia
+                            encontrado = 0
+                            ci_cliente = cliente.cedula
+                            if len(clientes_ordenados) > 0:
+                                for i in range(len(clientes_ordenados)):
+                                    if int(ci_cliente) == int(clientes_ordenados[i]["cedula"]):
+                                        clientes_ordenados[i]["tickets"] += 1
+                                        encontrado = 1
+                                        break
+                                if encontrado == 0:
+                                    diccionario = {"cedula": ci_cliente, "tickets": 1}
+                                    clientes_ordenados.append(diccionario)  
+                            else:
+                                diccionario = {"cedula": ci_cliente, "tickets": 1}
+                                clientes_ordenados.append(diccionario)   
+                        
+                        #Ordenamos la lista clientes_ordenados de mayor a menor de acuerdo a la cantidad de tickets
+                        for i in range(len(clientes_ordenados)):
+                            for j in range(i+1, len(clientes_ordenados)):
+                                if clientes_ordenados[i]["tickets"] < clientes_ordenados[j]["tickets"]:
+                                    clientes_ordenados[i], clientes_ordenados[j] = clientes_ordenados[j], clientes_ordenados[i]
+                        
+                        # Extraer datos de la lista clientes_ordenados
+                        cedulas = [cliente["cedula"] for cliente in clientes_ordenados]
+                        cantidad_tickets = [cliente["tickets"] for cliente in clientes_ordenados]
+
+                        # Ordenar juntos por cantidad de tickets (mayor a menor)
+                        datos_ordenados = sorted(zip(cedulas, cantidad_tickets), key=lambda x: x[1], reverse=True)
+
+                        cedulas, ncantidad_tickets = zip(*datos_ordenados)
+
+                        # Top 3 clientes
+                        top_3_cedulas = cedulas[:3]
+                        top_3_cantidad_tickets = cantidad_tickets[:3]
+
+                        # Crear figura y subfigura
+                        fig, ax = plt.subplots(figsize=(12, 6))
+
+                        # Barras apiladas para clientes y tickets
+                        barras1 = ax.bar(top_3_cedulas, top_3_cantidad_tickets, label='Tickets comprados', color='royalblue')
+
+                        # Personalizar el gráfico
+                        ax.set_title('Top 3 clientes con más tickets comprados')
+                        ax.set_xlabel('Cédula del cliente')
+                        ax.set_ylabel('Cantidad')
+                        ax.set_xticks(range(len(top_3_cedulas)))
+                        ax.set_xticklabels(top_3_cedulas)
+                        ax.legend()
+
+                        # Mostrar el gráfico
+                        plt.tight_layout()
+                        plt.show()
+                    else:
+                        break
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                
+                
+                
                 # Opcion 8. para regresar al Menu Principal 
             elif opcion == 8:
                 break 
