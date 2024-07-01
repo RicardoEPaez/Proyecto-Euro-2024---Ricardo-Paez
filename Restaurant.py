@@ -7,6 +7,7 @@ class Restaurant:
     Atributos:\n
     name: String que representa el nombre del restaurante\n
     products: Lista de strings que representan los productos que ofrece el restaurante\n
+    ventas: Lista de objeto Venta
        
     Metodos:\n
     show: Muestra el nombre y los productos de un restaurant"""  
